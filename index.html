@@ -90,9 +90,39 @@
           <div class="location">⌁ Việt Nam · UTC+7</div>
           <div class="music-card" id="musicCard">
             <div class="album-orb"></div>
-            <div class="track-meta"><strong>The Night</strong><span>Your favorite playlist</span></div>
-            <button id="playBtn" class="play">▶</button>
-            <div class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+            <div class="track-meta">
+              <strong id="playlistTitle">Bài hát 1</strong>
+              <span id="playlistArtist">Nghệ sĩ</span>
+            </div>
+
+            <div class="playlist-controls" style="display:flex;align-items:center;gap:8px;flex:0 0 auto;">
+              <button type="button" id="playlistPrev" class="playlist-btn" aria-label="Bài trước"
+                style="width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.07);color:#fff;cursor:pointer;">
+                ‹
+              </button>
+
+              <button type="button" id="playlistPlay" class="playlist-btn" aria-label="Phát hoặc tạm dừng"
+                style="width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:linear-gradient(135deg,#8b5cf6,#d99cff);color:#fff;cursor:pointer;font-size:14px;">
+                ▶
+              </button>
+
+              <button type="button" id="playlistNext" class="playlist-btn" aria-label="Bài tiếp"
+                style="width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.07);color:#fff;cursor:pointer;">
+                ›
+              </button>
+            </div>
+
+            <div class="playlist-info" style="display:flex;flex-direction:column;gap:5px;min-width:0;flex:1;margin-left:6px;">
+              <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.58);">
+                Playlist <span id="playlistCount">01 / 03</span>
+              </div>
+              <div class="wave" id="playlistWave" style="display:flex;align-items:center;gap:3px;height:20px;">
+                <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+              </div>
+            </div>
+
+            <audio id="playlistAudio" preload="metadata"></audio>
           </div>
         </div>
       </div>
@@ -193,6 +223,115 @@
   <div class="scroll-progress"><i id="progress"></i></div>
   <div class="toast" id="toast">Copied ✓</div>
 
+  <script>
+    const playlist = [
+      {
+        title: "Bài hát 1",
+        artist: "Nghệ sĩ 1",
+        src: "music/bai1.mp3"
+      },
+      {
+        title: "Bài hát 2",
+        artist: "Nghệ sĩ 2",
+        src: "music/bai2.mp3"
+      },
+      {
+        title: "Bài hát 3",
+        artist: "Nghệ sĩ 3",
+        src: "music/bai3.mp3"
+      }
+    ];
+
+    const audio = document.getElementById("playlistAudio");
+    const playBtn = document.getElementById("playlistPlay");
+    const prevBtn = document.getElementById("playlistPrev");
+    const nextBtn = document.getElementById("playlistNext");
+    const titleEl = document.getElementById("playlistTitle");
+    const artistEl = document.getElementById("playlistArtist");
+    const countEl = document.getElementById("playlistCount");
+    const wave = document.getElementById("playlistWave");
+
+    let currentSong = 0;
+
+    function setWave(playing) {
+      wave.querySelectorAll("i").forEach((bar, index) => {
+        bar.style.animation = playing
+          ? `bar .7s ease-in-out infinite alternate ${index * -0.08}s`
+          : "";
+      });
+    }
+
+    function loadSong(index, autoPlay = false) {
+      currentSong = (index + playlist.length) % playlist.length;
+      const song = playlist[currentSong];
+
+      audio.src = song.src;
+      titleEl.textContent = song.title;
+      artistEl.textContent = song.artist;
+      countEl.textContent =
+        String(currentSong + 1).padStart(2, "0") +
+        " / " +
+        String(playlist.length).padStart(2, "0");
+
+      playBtn.textContent = "▶";
+      setWave(false);
+
+      if (autoPlay) {
+        audio.play().then(() => {
+          playBtn.textContent = "❚❚";
+          setWave(true);
+        }).catch(() => {});
+      }
+    }
+
+    playBtn.addEventListener("click", () => {
+      if (audio.paused) {
+        audio.play().then(() => {
+          playBtn.textContent = "❚❚";
+          setWave(true);
+        }).catch(() => {});
+      } else {
+        audio.pause();
+        playBtn.textContent = "▶";
+        setWave(false);
+      }
+    });
+
+    prevBtn.addEventListener("click", () => {
+      loadSong(currentSong - 1, true);
+    });
+
+    nextBtn.addEventListener("click", () => {
+      loadSong(currentSong + 1, true);
+    });
+
+    audio.addEventListener("ended", () => {
+      loadSong(currentSong + 1, true);
+    });
+
+    audio.addEventListener("pause", () => {
+      playBtn.textContent = "▶";
+      setWave(false);
+    });
+
+    loadSong(0);
+  </script>
+
+  <style>
+    @keyframes bar {
+      from { transform: scaleY(.35); }
+      to { transform: scaleY(1.35); }
+    }
+
+    .playlist-btn {
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .playlist-btn:hover {
+      transform: translateY(-2px) scale(1.05);
+      background: rgba(255,255,255,.14) !important;
+    }
+  </style>
   <script src="script.js"></script>
 </body>
 </html>

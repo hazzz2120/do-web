@@ -365,23 +365,160 @@ $$('.copy-btn').forEach((btn) => {
    MUSIC PLAYER / VISUALIZER
 ========================================================= */
 
-let playing = false;
-
 const playBtn = $('#playBtn');
+const prevBtn = $('#prevBtn');
+const nextBtn = $('#nextBtn');
+
+const audioPlayer = $('#audioPlayer');
+
+const musicTitle = $('#musicTitle');
+const musicArtist = $('#musicArtist');
+
+const waveBars = $$('.wave i');
+
+
+const playlist = [
+    {
+        title: 'Bài hát số 1',
+        artist: 'Nghệ sĩ 1',
+        src: 'music/bai-1.mp3'
+    },
+
+    {
+        title: 'Bài hát số 2',
+        artist: 'Nghệ sĩ 2',
+        src: 'music/bai-2.mp3'
+    },
+
+    {
+        title: 'Bài hát số 3',
+        artist: 'Nghệ sĩ 3',
+        src: 'music/bai-3.mp3'
+    },
+
+    {
+        title: 'Bài hát số 4',
+        artist: 'Nghệ sĩ 4',
+        src: 'music/bai-4.mp3'
+    }
+];
+
+
+let currentSong = 0;
+
+
+function loadSong(index, autoPlay = false) {
+    currentSong = index;
+
+    const song = playlist[currentSong];
+
+    audioPlayer.src = song.src;
+
+    musicTitle.textContent = song.title;
+    musicArtist.textContent = song.artist;
+
+    if (autoPlay) {
+        audioPlayer.play();
+        setPlayingUI();
+    } else {
+        setPausedUI();
+    }
+}
+
+
+function setPlayingUI() {
+    playBtn.textContent = '❚❚';
+
+    waveBars.forEach((bar, index) => {
+        bar.style.animation =
+            `bar .7s ease-in-out infinite alternate ${index * -0.08}s`;
+    });
+}
+
+
+function setPausedUI() {
+    playBtn.textContent = '▶';
+
+    waveBars.forEach((bar) => {
+        bar.style.animation = '';
+    });
+}
+
+
+/* Play / Pause */
 
 if (playBtn) {
-  playBtn.addEventListener('click', () => {
-    playing = !playing;
+    playBtn.addEventListener('click', () => {
 
-    playBtn.textContent = playing ? '❚❚' : '▶';
+        if (audioPlayer.paused) {
 
-    $$('.wave i').forEach((bar, index) => {
-      bar.style.animation = playing
-        ? `bar .7s ease-in-out infinite alternate ${index * -0.08}s`
-        : '';
+            audioPlayer.play();
+
+            setPlayingUI();
+
+        } else {
+
+            audioPlayer.pause();
+
+            setPausedUI();
+        }
+
     });
-  });
 }
+
+
+/* Next */
+
+if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+
+        currentSong++;
+
+        if (currentSong >= playlist.length) {
+            currentSong = 0;
+        }
+
+        loadSong(currentSong, true);
+
+    });
+}
+
+
+/* Previous */
+
+if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+
+        currentSong--;
+
+        if (currentSong < 0) {
+            currentSong = playlist.length - 1;
+        }
+
+        loadSong(currentSong, true);
+
+    });
+}
+
+
+/* Tự chuyển bài khi bài hiện tại kết thúc */
+
+audioPlayer.addEventListener('ended', () => {
+
+    currentSong++;
+
+    if (currentSong >= playlist.length) {
+        currentSong = 0;
+    }
+
+    loadSong(currentSong, true);
+
+});
+
+
+/* Load bài đầu tiên */
+
+loadSong(0);
 
 
 /* Dynamic keyframes */
