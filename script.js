@@ -772,7 +772,7 @@ const skills = {
     design: [
         'LẬP TRÌNH',
         'C++ · HTML · CSS · JavaScript',
-        '89%'
+        '20%'
     ],
 
     motion: [
