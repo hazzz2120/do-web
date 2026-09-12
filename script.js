@@ -966,27 +966,27 @@ const waveBars =
 const playlist = [
 
     {
-        title: 'Bài hát số 1',
-        artist: 'Nghệ sĩ 1',
-        src: 'music/bai1.mp3'
+        title: '2gsang',
+        artist: 'Obito',
+        src: 'music/2gsang.mp3'
     },
 
     {
-        title: 'Bài hát số 2',
-        artist: 'Nghệ sĩ 2',
-        src: 'music/bai2.mp3'
+        title: 'Cảm Ơn',
+        artist: 'MCK',
+        src: 'music/camon.mp3'
     },
 
     {
-        title: 'Bài hát số 3',
-        artist: 'Nghệ sĩ 3',
-        src: 'music/bai3.mp3'
+        title: 'Túy ÂM',
+        artist: 'Masew',
+        src: 'music/TN.mp3'
     },
 
     {
-        title: 'Bài hát số 4',
-        artist: 'Nghệ sĩ 4',
-        src: 'music/bai4.mp3'
+        title: 'The Night',
+        artist: 'Avicii',
+        src: 'music/tuyam.mp3'
     }
 
 ];
