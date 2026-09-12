@@ -259,33 +259,33 @@ $$('.magnetic').forEach((el) => {
 
 const skills = {
   web: [
-    'WEB',
-    'HTML · CSS · JavaScript · UI interaction',
-    '94%'
+    'c++',
+    'lập trình thi đấu - competitive programming',
+    '36%'
   ],
 
   design: [
-    'DESIGN',
-    'Visual systems · Typography · Layout · Figma',
-    '89%'
+    'lập trình',
+    'học các ngôn ngữ lập trình',
+    '9%'
   ],
 
   motion: [
-    'MOTION',
-    'Micro-interactions · Transitions · Motion language',
-    '86%'
+    'lập trình thi đấu',
+    'Giải thuật · Tư duy logic',
+    '10%'
   ],
 
   photo: [
-    'PHOTO',
-    'Moodboard · Color · Visual storytelling',
-    '82%'
+    'đạp xe',
+    'roadbike',
+    '67%'
   ],
 
   content: [
-    'CONTENT',
-    'Writing · Storytelling · Social media ideas',
-    '80%'
+    'chatgpt',
+    'nole chatgpt',
+    '100%'
   ]
 };
 
