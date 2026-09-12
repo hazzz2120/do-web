@@ -1933,3 +1933,361 @@ html.theme-nebula #themeBtn.active {
     }
 
 }
+
+/* =========================================================
+   CURSOR STATES
+========================================================= */
+
+#cursorRing {
+    transition:
+        width .25s cubic-bezier(.22, 1, .36, 1),
+        height .25s cubic-bezier(.22, 1, .36, 1),
+        border-color .25s ease,
+        box-shadow .25s ease,
+        background .25s ease;
+}
+
+
+/* -----------------------------------------
+   DEFAULT
+----------------------------------------- */
+
+#cursorRing.state-default {
+    border-color: rgba(220, 190, 255, .55);
+}
+
+
+/* -----------------------------------------
+   OPEN
+----------------------------------------- */
+
+#cursorRing.state-open {
+    border-color: rgba(255, 255, 255, .75);
+
+    box-shadow:
+        0 0 18px rgba(139, 92, 246, .25);
+}
+
+
+/* -----------------------------------------
+   VIEW
+----------------------------------------- */
+
+#cursorRing.state-view {
+    border-color: rgba(139, 92, 246, .8);
+
+    box-shadow:
+        0 0 20px rgba(139, 92, 246, .35),
+        0 0 40px rgba(139, 92, 246, .12);
+}
+
+
+/* -----------------------------------------
+   SKILL
+----------------------------------------- */
+
+#cursorRing.state-skill {
+    border-color: rgba(34, 211, 238, .85);
+
+    box-shadow:
+        0 0 18px rgba(34, 211, 238, .35),
+        0 0 40px rgba(34, 211, 238, .12);
+}
+
+
+/* -----------------------------------------
+   PLAY
+----------------------------------------- */
+
+#cursorRing.state-play {
+    border-color: rgba(236, 72, 153, .85);
+
+    box-shadow:
+        0 0 20px rgba(236, 72, 153, .38),
+        0 0 42px rgba(236, 72, 153, .13);
+}
+
+
+/* -----------------------------------------
+   NEXT / PREV
+----------------------------------------- */
+
+#cursorRing.state-next,
+#cursorRing.state-prev {
+    border-color: rgba(210, 190, 255, .8);
+
+    box-shadow:
+        0 0 18px rgba(139, 92, 246, .3);
+}
+
+
+/* -----------------------------------------
+   COLOR
+----------------------------------------- */
+
+#cursorRing.state-color {
+    border-color: rgba(255, 255, 255, .9);
+
+    box-shadow:
+        0 0 18px rgba(255, 255, 255, .3),
+        0 0 40px rgba(139, 92, 246, .2);
+}
+
+
+/* -----------------------------------------
+   THEME
+----------------------------------------- */
+
+#cursorRing.state-theme {
+    border-color: rgba(139, 92, 246, .95);
+
+    box-shadow:
+        0 0 20px rgba(139, 92, 246, .45),
+        0 0 50px rgba(236, 72, 153, .16);
+}
+
+
+/* -----------------------------------------
+   SOUND
+----------------------------------------- */
+
+#cursorRing.state-sound {
+    border-color: rgba(34, 211, 238, .8);
+
+    box-shadow:
+        0 0 20px rgba(34, 211, 238, .35);
+}
+
+
+/* -----------------------------------------
+   COPY
+----------------------------------------- */
+
+#cursorRing.state-copy {
+    border-color: rgba(255, 255, 255, .8);
+
+    box-shadow:
+        0 0 18px rgba(255, 255, 255, .25);
+}
+
+
+/* -----------------------------------------
+   SOCIAL
+----------------------------------------- */
+
+#cursorRing.state-social {
+    border-color: rgba(236, 72, 153, .8);
+
+    box-shadow:
+        0 0 20px rgba(236, 72, 153, .32);
+}
+
+
+/* =========================================================
+   CURSOR LABEL
+========================================================= */
+
+#cursorLabel {
+    transition:
+        opacity .2s ease,
+        transform .25s cubic-bezier(.22, 1, .36, 1);
+
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .18em;
+}
+
+
+/* =========================================================
+   REVEAL — MƯỢT 2 CHIỀU
+========================================================= */
+
+.reveal {
+    opacity: 0;
+
+    transform:
+        translate3d(0, 34px, 0)
+        scale(.985);
+
+    filter: blur(7px);
+
+    transition:
+        opacity .75s cubic-bezier(.22, 1, .36, 1),
+        transform .85s cubic-bezier(.22, 1, .36, 1),
+        filter .75s cubic-bezier(.22, 1, .36, 1);
+
+    will-change:
+        opacity,
+        transform,
+        filter;
+}
+
+
+.reveal.reveal-from-bottom:not(.visible) {
+    opacity: 0;
+
+    transform:
+        translate3d(0, 34px, 0)
+        scale(.985);
+
+    filter: blur(7px);
+}
+
+
+.reveal.reveal-from-top:not(.visible) {
+    opacity: 0;
+
+    transform:
+        translate3d(0, -34px, 0)
+        scale(.985);
+
+    filter: blur(7px);
+}
+
+
+.reveal.visible {
+    opacity: 1;
+
+    transform:
+        translate3d(0, 0, 0)
+        scale(1);
+
+    filter: blur(0);
+}
+
+
+.reveal:not(.visible) {
+    transition-delay: 0s;
+}
+
+
+/* =========================================================
+   REVEAL STAGGER
+========================================================= */
+
+.reveal.visible:nth-child(1) {
+    transition-delay: .00s;
+}
+
+.reveal.visible:nth-child(2) {
+    transition-delay: .06s;
+}
+
+.reveal.visible:nth-child(3) {
+    transition-delay: .12s;
+}
+
+.reveal.visible:nth-child(4) {
+    transition-delay: .18s;
+}
+
+.reveal.visible:nth-child(5) {
+    transition-delay: .24s;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    #cursorRing,
+    #cursorDot,
+    #cursorLabel {
+        display: none;
+    }
+
+    .reveal {
+        transform:
+            translate3d(0, 24px, 0)
+            scale(.99);
+
+        filter: blur(5px);
+
+        transition:
+            opacity .6s ease,
+            transform .7s cubic-bezier(.22, 1, .36, 1),
+            filter .6s ease;
+    }
+
+    .reveal.reveal-from-top:not(.visible) {
+        transform:
+            translate3d(0, -24px, 0)
+            scale(.99);
+    }
+
+
+/* =========================================================
+   MUSIC VISUALIZER
+========================================================= */
+
+#playlistWave {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    height: 34px;
+    min-width: 75px;
+    overflow: hidden;
+}
+
+
+/* Thanh waveform */
+
+#playlistWave i {
+    display: block;
+
+    width: 3px;
+    height: 7px;
+
+    min-height: 4px;
+
+    border-radius: 999px;
+
+    background:
+        linear-gradient(
+            to top,
+            var(--purple),
+            var(--pink),
+            var(--cyan)
+        );
+
+    box-shadow:
+        0 0 7px
+        rgba(139, 92, 246, .35);
+
+    opacity: .55;
+
+    transition:
+        height .08s linear,
+        opacity .08s linear,
+        filter .2s ease;
+}
+
+
+/* Khi đang phát */
+
+#playlistPlay.playing
+~ #playlistWave i {
+    filter:
+        drop-shadow(
+            0 0 5px
+            rgba(139, 92, 246, .35)
+        );
+}
+
+
+/* Glow nhẹ cho music card khi đang phát */
+
+.music-card:has(
+    #playlistPlay.playing
+) {
+    box-shadow:
+        0 0 25px
+        rgba(139, 92, 246, .08);
+}}

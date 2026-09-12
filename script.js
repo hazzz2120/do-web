@@ -40,7 +40,7 @@ const boot = setInterval(() => {
 
 
 /* =========================================================
-   BACKGROUND
+   BACKGROUND — STARS + FLOATING PARTICLES
 ========================================================= */
 
 const canvas = $('#space');
@@ -48,9 +48,9 @@ const canvas = $('#space');
 if (canvas) {
     const ctx = canvas.getContext('2d');
 
-    let W;
-    let H;
-    let dpr;
+    let W = 0;
+    let H = 0;
+    let dpr = 1;
 
     let stars = [];
     let particles = [];
@@ -100,35 +100,13 @@ if (canvas) {
             () => ({
                 x: Math.random() * W,
                 y: Math.random() * H,
-
-                r:
-                    Math.random() * 2.2 +
-                    0.6,
-
-                baseX:
-                    Math.random() * W,
-
-                speedY:
-                    Math.random() * 0.35 +
-                    0.08,
-
-                drift:
-                    Math.random() * 0.7 +
-                    0.2,
-
-                phase:
-                    Math.random() *
-                    Math.PI *
-                    2,
-
-                alpha:
-                    Math.random() * 0.4 +
-                    0.08,
-
-                direction:
-                    Math.random() > 0.5
-                        ? 1
-                        : -1
+                r: Math.random() * 2.2 + 0.6,
+                baseX: Math.random() * W,
+                speedY: Math.random() * 0.35 + 0.08,
+                drift: Math.random() * 0.7 + 0.2,
+                phase: Math.random() * Math.PI * 2,
+                alpha: Math.random() * 0.4 + 0.08,
+                direction: Math.random() > 0.5 ? 1 : -1
             })
         );
     }
@@ -152,7 +130,6 @@ if (canvas) {
             H
         );
 
-
         /* -----------------------------------------
            STARS
         ----------------------------------------- */
@@ -175,8 +152,7 @@ if (canvas) {
                     )
                 );
 
-            ctx.fillStyle =
-                '#d8c7ff';
+            ctx.fillStyle = '#d8c7ff';
 
             ctx.beginPath();
 
@@ -191,13 +167,11 @@ if (canvas) {
             ctx.fill();
         }
 
-
         /* -----------------------------------------
            FLOATING PARTICLES
         ----------------------------------------- */
 
         for (const p of particles) {
-
             p.y +=
                 p.speedY *
                 p.direction;
@@ -222,15 +196,13 @@ if (canvas) {
 
             const waveX =
                 Math.sin(
-                    particleTime *
-                    p.drift +
+                    particleTime * p.drift +
                     p.phase
                 ) * 25;
 
             const drawX =
                 p.baseX +
                 waveX;
-
 
             const glow =
                 ctx.createRadialGradient(
@@ -252,9 +224,7 @@ if (canvas) {
                 'rgba(210,190,255,0)'
             );
 
-            ctx.fillStyle =
-                glow;
-
+            ctx.fillStyle = glow;
             ctx.globalAlpha = 1;
 
             ctx.beginPath();
@@ -269,9 +239,7 @@ if (canvas) {
 
             ctx.fill();
 
-
-            ctx.fillStyle =
-                '#eadfff';
+            ctx.fillStyle = '#eadfff';
 
             ctx.globalAlpha =
                 p.alpha + 0.08;
@@ -299,31 +267,139 @@ if (canvas) {
 
 
 /* =========================================================
-   CUSTOM CURSOR
+   CUSTOM CURSOR — STATE SYSTEM
 ========================================================= */
 
-let mx =
-    window.innerWidth / 2;
-
-let my =
-    window.innerHeight / 2;
+let mx = window.innerWidth / 2;
+let my = window.innerHeight / 2;
 
 let rx = mx;
 let ry = my;
 
-const dot =
-    $('#cursorDot');
+const dot = $('#cursorDot');
+const ring = $('#cursorRing');
+const label = $('#cursorLabel');
 
-const ring =
-    $('#cursorRing');
 
-const label =
-    $('#cursorLabel');
+/*
+   Các trạng thái cursor
+*/
+
+const cursorStates = {
+    default: {
+        text: '',
+        size: 38,
+        className: 'state-default'
+    },
+
+    open: {
+        text: 'OPEN',
+        size: 56,
+        className: 'state-open'
+    },
+
+    view: {
+        text: 'VIEW',
+        size: 62,
+        className: 'state-view'
+    },
+
+    skill: {
+        text: 'SKILL',
+        size: 60,
+        className: 'state-skill'
+    },
+
+    play: {
+        text: 'PLAY',
+        size: 58,
+        className: 'state-play'
+    },
+
+    next: {
+        text: 'NEXT',
+        size: 54,
+        className: 'state-next'
+    },
+
+    prev: {
+        text: 'PREV',
+        size: 54,
+        className: 'state-prev'
+    },
+
+    color: {
+        text: 'COLOR',
+        size: 64,
+        className: 'state-color'
+    },
+
+    theme: {
+        text: 'THEME',
+        size: 60,
+        className: 'state-theme'
+    },
+
+    sound: {
+        text: 'SOUND',
+        size: 60,
+        className: 'state-sound'
+    },
+
+    copy: {
+        text: 'COPY',
+        size: 56,
+        className: 'state-copy'
+    },
+
+    social: {
+        text: 'SOCIAL',
+        size: 64,
+        className: 'state-social'
+    }
+};
+
+
+function setCursorState(stateName = 'default') {
+    const state =
+        cursorStates[stateName] ||
+        cursorStates.default;
+
+    if (ring) {
+        Object.values(cursorStates).forEach(
+            (item) => {
+                ring.classList.remove(
+                    item.className
+                );
+            }
+        );
+
+        ring.classList.add(
+            state.className
+        );
+
+        ring.style.width =
+            state.size + 'px';
+
+        ring.style.height =
+            state.size + 'px';
+    }
+
+    if (label) {
+        label.textContent =
+            state.text;
+
+        label.style.opacity =
+            state.text
+                ? '1'
+                : '0';
+    }
+}
+
 
 window.addEventListener(
     'mousemove',
     (e) => {
-
         mx = e.clientX;
         my = e.clientY;
 
@@ -342,12 +418,11 @@ window.addEventListener(
             label.style.top =
                 my + 'px';
         }
-
     }
 );
 
-function cursorLoop() {
 
+function cursorLoop() {
     rx +=
         (mx - rx) *
         0.18;
@@ -372,8 +447,126 @@ function cursorLoop() {
 cursorLoop();
 
 
+/*
+   Xác định state dựa vào element
+*/
+
+function getCursorState(element) {
+
+    if (
+        element.matches(
+            '#playlistPlay'
+        )
+    ) {
+        return 'play';
+    }
+
+    if (
+        element.matches(
+            '#playlistNext'
+        )
+    ) {
+        return 'next';
+    }
+
+    if (
+        element.matches(
+            '#playlistPrev'
+        )
+    ) {
+        return 'prev';
+    }
+
+    if (
+        element.matches(
+            '#colorWheel'
+        )
+    ) {
+        return 'color';
+    }
+
+    if (
+        element.matches(
+            '#themeBtn'
+        )
+    ) {
+        return 'theme';
+    }
+
+    if (
+        element.matches(
+            '#soundBtn'
+        )
+    ) {
+        return 'sound';
+    }
+
+    if (
+        element.matches(
+            '.copy-btn'
+        )
+    ) {
+        return 'copy';
+    }
+
+    if (
+        element.matches(
+            '.skill-node'
+        )
+    ) {
+        return 'skill';
+    }
+
+    if (
+        element.matches(
+            '.project-card'
+        )
+    ) {
+        return 'view';
+    }
+
+    if (
+        element.matches(
+            '.social-card'
+        )
+    ) {
+        return 'social';
+    }
+
+    if (
+        element.matches(
+            '.tilt'
+        )
+    ) {
+        return 'view';
+    }
+
+    if (
+        element.matches(
+            'a'
+        )
+    ) {
+        return 'open';
+    }
+
+    if (
+        element.matches(
+            'button'
+        )
+    ) {
+        return 'open';
+    }
+
+    return 'default';
+}
+
+
+/*
+   Hover state
+*/
+
 $$(
-    'a, button, .tilt, .social-card'
+    'a, button, .tilt, .social-card, .skill-node, .project-card, .copy-btn, #colorWheel'
 ).forEach(
     (el) => {
 
@@ -381,18 +574,9 @@ $$(
             'mouseenter',
             () => {
 
-                if (ring) {
-                    ring.style.width =
-                        '58px';
-
-                    ring.style.height =
-                        '58px';
-                }
-
-                if (label) {
-                    label.style.opacity =
-                        '1';
-                }
+                setCursorState(
+                    getCursorState(el)
+                );
 
             }
         );
@@ -401,29 +585,21 @@ $$(
             'mouseleave',
             () => {
 
-                if (ring) {
-                    ring.style.width =
-                        '38px';
-
-                    ring.style.height =
-                        '38px';
-                }
-
-                if (label) {
-                    label.style.opacity =
-                        '0';
-                }
+                setCursorState(
+                    'default'
+                );
 
             }
         );
-
     }
 );
 
 
+setCursorState('default');
+
+
 /* =========================================================
-   SCROLL REVEAL
-   MƯỢT CẢ KHI ĐI VÀO LẪN ĐI RA
+   SCROLL REVEAL — 2 CHIỀU
 ========================================================= */
 
 const revealElements =
@@ -449,7 +625,9 @@ window.addEventListener(
         ) {
             scrollDirection =
                 'down';
-        } else if (
+        }
+
+        if (
             currentY <
             lastScrollY
         ) {
@@ -466,10 +644,6 @@ window.addEventListener(
     }
 );
 
-
-/*
-   Chuẩn bị trạng thái ban đầu.
-*/
 
 revealElements.forEach(
     (el) => {
@@ -504,24 +678,14 @@ const revealObserver =
                     const el =
                         entry.target;
 
-
-                    if (entry.isIntersecting) {
-
-                        /*
-                           Khi đi vào:
-
-                           Vuốt xuống:
-                           từ dưới -> lên
-
-                           Vuốt lên:
-                           từ trên -> xuống
-                        */
+                    if (
+                        entry.isIntersecting
+                    ) {
 
                         el.classList.remove(
                             'reveal-from-top',
                             'reveal-from-bottom'
                         );
-
 
                         if (
                             scrollDirection ===
@@ -539,12 +703,6 @@ const revealObserver =
                             );
 
                         }
-
-
-                        /*
-                           Ép browser nhận trạng thái
-                           trước khi chuyển sang visible
-                        */
 
                         requestAnimationFrame(
                             () => {
@@ -564,28 +722,16 @@ const revealObserver =
 
                     } else {
 
-                        /*
-                           Khi rời viewport:
-
-                           Không biến mất đột ngột.
-                           Chỉ remove visible,
-                           CSS transition sẽ tự chạy
-                           chiều ngược lại.
-                        */
-
                         el.classList.remove(
                             'visible'
                         );
 
                     }
-
                 }
             );
-
         },
         {
             threshold: 0.08,
-
             rootMargin:
                 '-4% 0px -8% 0px'
         }
@@ -692,10 +838,7 @@ $$('.tilt').forEach(
         card.addEventListener(
             'mouseleave',
             () => {
-
-                card.style.transform =
-                    '';
-
+                card.style.transform = '';
             }
         );
 
@@ -746,10 +889,7 @@ $$('.magnetic').forEach(
         el.addEventListener(
             'mouseleave',
             () => {
-
-                el.style.transform =
-                    '';
-
+                el.style.transform = '';
             }
         );
 
@@ -772,7 +912,7 @@ const skills = {
     design: [
         'LẬP TRÌNH',
         'C++ · HTML · CSS · JavaScript',
-        '20%'
+        '89%'
     ],
 
     motion: [
@@ -802,9 +942,7 @@ $$('.skill-node').forEach(
         node.addEventListener(
             'pointerdown',
             (event) => {
-
                 event.stopPropagation();
-
             }
         );
 
@@ -935,7 +1073,7 @@ $$('.copy-btn').forEach(
 
 
 /* =========================================================
-   MUSIC PLAYER
+   MUSIC PLAYER + VISUALIZER
 ========================================================= */
 
 const playBtn =
@@ -962,6 +1100,10 @@ const musicCount =
 const waveBars =
     $$('#playlistWave i');
 
+
+/* =========================================================
+   PLAYLIST — GIỮ NGUYÊN
+========================================================= */
 
 const playlist = [
 
@@ -994,6 +1136,120 @@ const playlist = [
 let currentSong = 0;
 
 
+/* =========================================================
+   VISUALIZER
+========================================================= */
+
+let visualizerFrame = null;
+let visualizerTime = 0;
+
+
+function animateVisualizer() {
+
+    if (!audioPlayer || audioPlayer.paused) {
+        cancelAnimationFrame(
+            visualizerFrame
+        );
+
+        visualizerFrame = null;
+
+        return;
+    }
+
+
+    visualizerTime += 0.14;
+
+
+    waveBars.forEach(
+        (bar, index) => {
+
+            const wave =
+                Math.sin(
+                    visualizerTime +
+                    index * 0.65
+                );
+
+            const wave2 =
+                Math.sin(
+                    visualizerTime * 1.7 +
+                    index * 0.45
+                );
+
+            const height =
+                5 +
+                (
+                    (wave + 1) / 2
+                ) * 15 +
+                (
+                    (wave2 + 1) / 2
+                ) * 8;
+
+
+            bar.style.height =
+                `${height}px`;
+
+            bar.style.opacity =
+                0.55 +
+                (
+                    (wave + 1) / 2
+                ) * 0.45;
+
+        }
+    );
+
+
+    visualizerFrame =
+        requestAnimationFrame(
+            animateVisualizer
+        );
+}
+
+
+function startVisualizer() {
+
+    if (visualizerFrame) {
+        cancelAnimationFrame(
+            visualizerFrame
+        );
+    }
+
+    visualizerTime = 0;
+
+    animateVisualizer();
+}
+
+
+function stopVisualizer() {
+
+    if (visualizerFrame) {
+
+        cancelAnimationFrame(
+            visualizerFrame
+        );
+
+        visualizerFrame = null;
+    }
+
+
+    waveBars.forEach(
+        (bar) => {
+
+            bar.style.height =
+                '';
+
+            bar.style.opacity =
+                '';
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   PLAY / PAUSE UI
+========================================================= */
+
 function setPlayingUI() {
 
     if (playBtn) {
@@ -1001,17 +1257,12 @@ function setPlayingUI() {
         playBtn.textContent =
             '❚❚';
 
+        playBtn.classList.add(
+            'playing'
+        );
     }
 
-    waveBars.forEach(
-        (bar, index) => {
-
-            bar.style.animation =
-                `bar .7s ease-in-out infinite alternate ${index * -0.08}s`;
-
-        }
-    );
-
+    startVisualizer();
 }
 
 
@@ -1022,19 +1273,18 @@ function setPausedUI() {
         playBtn.textContent =
             '▶';
 
+        playBtn.classList.remove(
+            'playing'
+        );
     }
 
-    waveBars.forEach(
-        (bar) => {
-
-            bar.style.animation =
-                '';
-
-        }
-    );
-
+    stopVisualizer();
 }
 
+
+/* =========================================================
+   LOAD SONG
+========================================================= */
 
 function loadSong(
     index,
@@ -1048,6 +1298,7 @@ function loadSong(
         return;
     }
 
+
     currentSong =
         (
             index +
@@ -1055,11 +1306,14 @@ function loadSong(
         ) %
         playlist.length;
 
+
     const song =
         playlist[currentSong];
 
+
     audioPlayer.src =
         song.src;
+
 
     if (musicTitle) {
 
@@ -1068,12 +1322,14 @@ function loadSong(
 
     }
 
+
     if (musicArtist) {
 
         musicArtist.textContent =
             song.artist;
 
     }
+
 
     if (musicCount) {
 
@@ -1094,7 +1350,9 @@ function loadSong(
 
     }
 
-    setPausedUI();
+
+    stopVisualizer();
+
 
     if (autoPlay) {
 
@@ -1120,6 +1378,10 @@ function loadSong(
 
 }
 
+
+/* =========================================================
+   PLAY BUTTON
+========================================================= */
 
 if (
     playBtn &&
@@ -1166,6 +1428,10 @@ if (
 }
 
 
+/* =========================================================
+   NEXT
+========================================================= */
+
 if (
     nextBtn &&
     audioPlayer
@@ -1185,6 +1451,10 @@ if (
 
 }
 
+
+/* =========================================================
+   PREVIOUS
+========================================================= */
 
 if (
     prevBtn &&
@@ -1206,7 +1476,31 @@ if (
 }
 
 
+/* =========================================================
+   AUDIO EVENTS
+========================================================= */
+
 if (audioPlayer) {
+
+    audioPlayer.addEventListener(
+        'play',
+        () => {
+
+            setPlayingUI();
+
+        }
+    );
+
+
+    audioPlayer.addEventListener(
+        'pause',
+        () => {
+
+            setPausedUI();
+
+        }
+    );
+
 
     audioPlayer.addEventListener(
         'ended',
@@ -1223,8 +1517,11 @@ if (audioPlayer) {
 }
 
 
-loadSong(0);
+/* =========================================================
+   INITIAL SONG
+========================================================= */
 
+loadSong(0);
 
 /* =========================================================
    COLOR WHEEL
@@ -1570,9 +1867,7 @@ window.addEventListener(
 
         setTimeout(
             () => {
-
                 ripple.remove();
-
             },
             700
         );
