@@ -51,7 +51,9 @@ if (canvas) {
     let W;
     let H;
     let dpr;
+
     let stars = [];
+    let particles = [];
 
     function resize() {
         dpr = Math.min(
@@ -84,6 +86,51 @@ if (canvas) {
                 s: Math.random() * 0.18 + 0.02
             })
         );
+
+        particles = Array.from(
+            {
+                length: Math.min(
+                    45,
+                    Math.max(
+                        20,
+                        Math.floor(W / 25)
+                    )
+                )
+            },
+            () => ({
+                x: Math.random() * W,
+                y: Math.random() * H,
+
+                r:
+                    Math.random() * 2.2 +
+                    0.6,
+
+                baseX:
+                    Math.random() * W,
+
+                speedY:
+                    Math.random() * 0.35 +
+                    0.08,
+
+                drift:
+                    Math.random() * 0.7 +
+                    0.2,
+
+                phase:
+                    Math.random() *
+                    Math.PI *
+                    2,
+
+                alpha:
+                    Math.random() * 0.4 +
+                    0.08,
+
+                direction:
+                    Math.random() > 0.5
+                        ? 1
+                        : -1
+            })
+        );
     }
 
     resize();
@@ -93,13 +140,22 @@ if (canvas) {
         resize
     );
 
+    let particleTime = 0;
+
     function draw() {
+        particleTime += 0.01;
+
         ctx.clearRect(
             0,
             0,
             W,
             H
         );
+
+
+        /* -----------------------------------------
+           STARS
+        ----------------------------------------- */
 
         for (const s of stars) {
             s.y -= s.s;
@@ -119,7 +175,8 @@ if (canvas) {
                     )
                 );
 
-            ctx.fillStyle = '#d8c7ff';
+            ctx.fillStyle =
+                '#d8c7ff';
 
             ctx.beginPath();
 
@@ -127,6 +184,104 @@ if (canvas) {
                 s.x,
                 s.y,
                 s.r,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fill();
+        }
+
+
+        /* -----------------------------------------
+           FLOATING PARTICLES
+        ----------------------------------------- */
+
+        for (const p of particles) {
+
+            p.y +=
+                p.speedY *
+                p.direction;
+
+            if (
+                p.direction > 0 &&
+                p.y > H + 10
+            ) {
+                p.y = -10;
+                p.x = Math.random() * W;
+                p.baseX = p.x;
+            }
+
+            if (
+                p.direction < 0 &&
+                p.y < -10
+            ) {
+                p.y = H + 10;
+                p.x = Math.random() * W;
+                p.baseX = p.x;
+            }
+
+            const waveX =
+                Math.sin(
+                    particleTime *
+                    p.drift +
+                    p.phase
+                ) * 25;
+
+            const drawX =
+                p.baseX +
+                waveX;
+
+
+            const glow =
+                ctx.createRadialGradient(
+                    drawX,
+                    p.y,
+                    0,
+                    drawX,
+                    p.y,
+                    p.r * 5
+                );
+
+            glow.addColorStop(
+                0,
+                `rgba(210,190,255,${p.alpha})`
+            );
+
+            glow.addColorStop(
+                1,
+                'rgba(210,190,255,0)'
+            );
+
+            ctx.fillStyle =
+                glow;
+
+            ctx.globalAlpha = 1;
+
+            ctx.beginPath();
+
+            ctx.arc(
+                drawX,
+                p.y,
+                p.r * 4,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fill();
+
+
+            ctx.fillStyle =
+                '#eadfff';
+
+            ctx.globalAlpha =
+                p.alpha + 0.08;
+
+            ctx.beginPath();
+
+            ctx.arc(
+                drawX,
+                p.y,
+                p.r,
                 0,
                 Math.PI * 2
             );
@@ -147,41 +302,66 @@ if (canvas) {
    CUSTOM CURSOR
 ========================================================= */
 
-let mx = window.innerWidth / 2;
-let my = window.innerHeight / 2;
+let mx =
+    window.innerWidth / 2;
+
+let my =
+    window.innerHeight / 2;
 
 let rx = mx;
 let ry = my;
 
-const dot = $('#cursorDot');
-const ring = $('#cursorRing');
-const label = $('#cursorLabel');
+const dot =
+    $('#cursorDot');
+
+const ring =
+    $('#cursorRing');
+
+const label =
+    $('#cursorLabel');
 
 window.addEventListener(
     'mousemove',
     (e) => {
+
         mx = e.clientX;
         my = e.clientY;
 
         if (dot) {
-            dot.style.left = mx + 'px';
-            dot.style.top = my + 'px';
+            dot.style.left =
+                mx + 'px';
+
+            dot.style.top =
+                my + 'px';
         }
 
         if (label) {
-            label.style.left = mx + 'px';
-            label.style.top = my + 'px';
+            label.style.left =
+                mx + 'px';
+
+            label.style.top =
+                my + 'px';
         }
+
     }
 );
 
 function cursorLoop() {
-    rx += (mx - rx) * 0.18;
-    ry += (my - ry) * 0.18;
+
+    rx +=
+        (mx - rx) *
+        0.18;
+
+    ry +=
+        (my - ry) *
+        0.18;
 
     if (ring) {
-        ring.style.left = rx + 'px';
-        ring.style.top = ry + 'px';
+        ring.style.left =
+            rx + 'px';
+
+        ring.style.top =
+            ry + 'px';
     }
 
     requestAnimationFrame(
@@ -202,13 +382,18 @@ $$(
             () => {
 
                 if (ring) {
-                    ring.style.width = '58px';
-                    ring.style.height = '58px';
+                    ring.style.width =
+                        '58px';
+
+                    ring.style.height =
+                        '58px';
                 }
 
                 if (label) {
-                    label.style.opacity = '1';
+                    label.style.opacity =
+                        '1';
                 }
+
             }
         );
 
@@ -217,13 +402,18 @@ $$(
             () => {
 
                 if (ring) {
-                    ring.style.width = '38px';
-                    ring.style.height = '38px';
+                    ring.style.width =
+                        '38px';
+
+                    ring.style.height =
+                        '38px';
                 }
 
                 if (label) {
-                    label.style.opacity = '0';
+                    label.style.opacity =
+                        '0';
                 }
+
             }
         );
 
@@ -233,21 +423,160 @@ $$(
 
 /* =========================================================
    SCROLL REVEAL
+   MƯỢT CẢ KHI ĐI VÀO LẪN ĐI RA
 ========================================================= */
 
-const io =
+const revealElements =
+    $$('.reveal');
+
+let lastScrollY =
+    window.scrollY;
+
+let scrollDirection =
+    'down';
+
+
+window.addEventListener(
+    'scroll',
+    () => {
+
+        const currentY =
+            window.scrollY;
+
+        if (
+            currentY >
+            lastScrollY
+        ) {
+            scrollDirection =
+                'down';
+        } else if (
+            currentY <
+            lastScrollY
+        ) {
+            scrollDirection =
+                'up';
+        }
+
+        lastScrollY =
+            currentY;
+
+    },
+    {
+        passive: true
+    }
+);
+
+
+/*
+   Chuẩn bị trạng thái ban đầu.
+*/
+
+revealElements.forEach(
+    (el) => {
+
+        el.classList.remove(
+            'visible'
+        );
+
+        el.classList.remove(
+            'reveal-from-top'
+        );
+
+        el.classList.remove(
+            'reveal-from-bottom'
+        );
+
+        el.classList.add(
+            'reveal-ready'
+        );
+
+    }
+);
+
+
+const revealObserver =
     new IntersectionObserver(
         (entries) => {
 
             entries.forEach(
                 (entry) => {
 
-                    if (
-                        entry.isIntersecting
-                    ) {
-                        entry.target.classList.add(
+                    const el =
+                        entry.target;
+
+
+                    if (entry.isIntersecting) {
+
+                        /*
+                           Khi đi vào:
+
+                           Vuốt xuống:
+                           từ dưới -> lên
+
+                           Vuốt lên:
+                           từ trên -> xuống
+                        */
+
+                        el.classList.remove(
+                            'reveal-from-top',
+                            'reveal-from-bottom'
+                        );
+
+
+                        if (
+                            scrollDirection ===
+                            'down'
+                        ) {
+
+                            el.classList.add(
+                                'reveal-from-bottom'
+                            );
+
+                        } else {
+
+                            el.classList.add(
+                                'reveal-from-top'
+                            );
+
+                        }
+
+
+                        /*
+                           Ép browser nhận trạng thái
+                           trước khi chuyển sang visible
+                        */
+
+                        requestAnimationFrame(
+                            () => {
+
+                                requestAnimationFrame(
+                                    () => {
+
+                                        el.classList.add(
+                                            'visible'
+                                        );
+
+                                    }
+                                );
+
+                            }
+                        );
+
+                    } else {
+
+                        /*
+                           Khi rời viewport:
+
+                           Không biến mất đột ngột.
+                           Chỉ remove visible,
+                           CSS transition sẽ tự chạy
+                           chiều ngược lại.
+                        */
+
+                        el.classList.remove(
                             'visible'
                         );
+
                     }
 
                 }
@@ -255,12 +584,22 @@ const io =
 
         },
         {
-            threshold: 0.12
+            threshold: 0.08,
+
+            rootMargin:
+                '-4% 0px -8% 0px'
         }
     );
 
-$$('.reveal').forEach(
-    (el) => io.observe(el)
+
+revealElements.forEach(
+    (el) => {
+
+        revealObserver.observe(
+            el
+        );
+
+    }
 );
 
 
@@ -290,7 +629,8 @@ window.addEventListener(
 
             progress.style.height =
                 (
-                    window.scrollY / h *
+                    window.scrollY /
+                    h *
                     100
                 ) + '%';
 
@@ -324,12 +664,18 @@ $$('.tilt').forEach(
                     card.getBoundingClientRect();
 
                 const x =
-                    (e.clientX - r.left) /
+                    (
+                        e.clientX -
+                        r.left
+                    ) /
                     r.width -
                     0.5;
 
                 const y =
-                    (e.clientY - r.top) /
+                    (
+                        e.clientY -
+                        r.top
+                    ) /
                     r.height -
                     0.5;
 
@@ -346,7 +692,10 @@ $$('.tilt').forEach(
         card.addEventListener(
             'mouseleave',
             () => {
-                card.style.transform = '';
+
+                card.style.transform =
+                    '';
+
             }
         );
 
@@ -375,7 +724,8 @@ $$('.magnetic').forEach(
                             r.left +
                             r.width / 2
                         )
-                    ) * 0.08;
+                    ) *
+                    0.08;
 
                 const y =
                     (
@@ -384,7 +734,8 @@ $$('.magnetic').forEach(
                             r.top +
                             r.height / 2
                         )
-                    ) * 0.08;
+                    ) *
+                    0.08;
 
                 el.style.transform =
                     `translate(${x}px, ${y}px)`;
@@ -395,7 +746,10 @@ $$('.magnetic').forEach(
         el.addEventListener(
             'mouseleave',
             () => {
-                el.style.transform = '';
+
+                el.style.transform =
+                    '';
+
             }
         );
 
@@ -441,13 +795,16 @@ const skills = {
 
 };
 
+
 $$('.skill-node').forEach(
     (node) => {
 
         node.addEventListener(
             'pointerdown',
             (event) => {
+
                 event.stopPropagation();
+
             }
         );
 
@@ -470,9 +827,11 @@ $$('.skill-node').forEach(
                 $$('.skill-node')
                     .forEach(
                         (item) => {
+
                             item.classList.remove(
                                 'active'
                             );
+
                         }
                     );
 
@@ -548,9 +907,11 @@ $$('.copy-btn').forEach(
 
                         setTimeout(
                             () => {
+
                                 toast.classList.remove(
                                     'show'
                                 );
+
                             },
                             1500
                         );
@@ -636,7 +997,10 @@ let currentSong = 0;
 function setPlayingUI() {
 
     if (playBtn) {
-        playBtn.textContent = '❚❚';
+
+        playBtn.textContent =
+            '❚❚';
+
     }
 
     waveBars.forEach(
@@ -654,12 +1018,18 @@ function setPlayingUI() {
 function setPausedUI() {
 
     if (playBtn) {
-        playBtn.textContent = '▶';
+
+        playBtn.textContent =
+            '▶';
+
     }
 
     waveBars.forEach(
         (bar) => {
-            bar.style.animation = '';
+
+            bar.style.animation =
+                '';
+
         }
     );
 
@@ -692,13 +1062,17 @@ function loadSong(
         song.src;
 
     if (musicTitle) {
+
         musicTitle.textContent =
             song.title;
+
     }
 
     if (musicArtist) {
+
         musicArtist.textContent =
             song.artist;
+
     }
 
     if (musicCount) {
@@ -706,11 +1080,17 @@ function loadSong(
         musicCount.textContent =
             String(
                 currentSong + 1
-            ).padStart(2, '0') +
+            ).padStart(
+                2,
+                '0'
+            ) +
             ' / ' +
             String(
                 playlist.length
-            ).padStart(2, '0');
+            ).padStart(
+                2,
+                '0'
+            );
 
     }
 
@@ -721,14 +1101,18 @@ function loadSong(
         audioPlayer
             .play()
             .then(() => {
+
                 setPlayingUI();
+
             })
             .catch(
                 (error) => {
+
                     console.warn(
                         'Không thể phát nhạc:',
                         error
                     );
+
                 }
             );
 
@@ -753,14 +1137,18 @@ if (
                 audioPlayer
                     .play()
                     .then(() => {
+
                         setPlayingUI();
+
                     })
                     .catch(
                         (error) => {
+
                             console.warn(
                                 'Không thể phát nhạc:',
                                 error
                             );
+
                         }
                     );
 
@@ -851,7 +1239,10 @@ function applyThemeColor(
 ) {
 
     const normalizedHue =
-        ((hue % 360) + 360) % 360;
+        (
+            (hue % 360) +
+            360
+        ) % 360;
 
     const purple =
         `hsl(${normalizedHue} 75% 65%)`;
@@ -911,7 +1302,10 @@ if (colorWheel) {
                 centerY;
 
             let angle =
-                Math.atan2(y, x) *
+                Math.atan2(
+                    y,
+                    x
+                ) *
                 180 /
                 Math.PI;
 
@@ -959,7 +1353,10 @@ if (colorWheel) {
                 centerY;
 
             let angle =
-                Math.atan2(y, x) *
+                Math.atan2(
+                    y,
+                    x
+                ) *
                 180 /
                 Math.PI;
 
@@ -989,12 +1386,15 @@ const themeBtn =
     $('#themeBtn');
 
 
-function setTheme2(enabled) {
+function setTheme2(
+    enabled
+) {
 
-    document.documentElement.classList.toggle(
-        'theme-nebula',
-        enabled
-    );
+    document.documentElement
+        .classList.toggle(
+            'theme-nebula',
+            enabled
+        );
 
     if (themeBtn) {
 
@@ -1007,12 +1407,6 @@ function setTheme2(enabled) {
 
 }
 
-
-/*
-   Theme 2 không dùng filter cho body.
-   Vì filter trên body sẽ làm cursor fixed bị lỗi
-   khi scroll.
-*/
 
 if (themeBtn) {
 
@@ -1176,7 +1570,9 @@ window.addEventListener(
 
         setTimeout(
             () => {
+
                 ripple.remove();
+
             },
             700
         );

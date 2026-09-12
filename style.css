@@ -1768,3 +1768,168 @@ html.theme-nebula #themeBtn.active {
         0 0 10px rgba(139,92,246,.85),
         0 0 20px rgba(236,72,153,.45);
 }
+
+/* =========================================================
+   REVEAL ANIMATION — BI-DIRECTIONAL
+========================================================= */
+
+
+/* =========================================
+   DELAY CHO CÁC ELEMENT
+========================================= */
+
+.reveal:nth-child(1) {
+    transition-delay: .03s;
+}
+
+.reveal:nth-child(2) {
+    transition-delay: .10s;
+}
+
+.reveal:nth-child(3) {
+    transition-delay: .17s;
+}
+
+.reveal:nth-child(4) {
+    transition-delay: .24s;
+}
+
+.reveal:nth-child(5) {
+    transition-delay: .31s;
+}
+
+
+/* =========================================
+   GIẢM CHUYỂN ĐỘNG NẾU USER BẬT REDUCE MOTION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .reveal {
+        transition-duration: .01ms;
+        transform: none;
+        filter: none;
+    }
+
+}
+
+/* =========================================================
+   SMOOTH BIDIRECTIONAL REVEAL
+========================================================= */
+
+.reveal {
+    opacity: 0;
+    transform: translate3d(0, 34px, 0) scale(.985);
+    filter: blur(7px);
+
+    transition:
+        opacity .75s cubic-bezier(.22, 1, .36, 1),
+        transform .85s cubic-bezier(.22, 1, .36, 1),
+        filter .75s cubic-bezier(.22, 1, .36, 1);
+
+    will-change:
+        opacity,
+        transform,
+        filter;
+}
+
+
+/* ---------------------------------------------------------
+   VÀO VIEWPORT TỪ DƯỚI
+--------------------------------------------------------- */
+
+.reveal.reveal-from-bottom:not(.visible) {
+    opacity: 0;
+    transform:
+        translate3d(0, 34px, 0)
+        scale(.985);
+    filter: blur(7px);
+}
+
+
+/* ---------------------------------------------------------
+   VÀO VIEWPORT TỪ TRÊN
+--------------------------------------------------------- */
+
+.reveal.reveal-from-top:not(.visible) {
+    opacity: 0;
+    transform:
+        translate3d(0, -34px, 0)
+        scale(.985);
+    filter: blur(7px);
+}
+
+
+/* ---------------------------------------------------------
+   ĐANG HIỂN THỊ
+--------------------------------------------------------- */
+
+.reveal.visible {
+    opacity: 1;
+    transform:
+        translate3d(0, 0, 0)
+        scale(1);
+    filter: blur(0);
+}
+
+
+/* ---------------------------------------------------------
+   EXIT KHÔNG DELAY
+--------------------------------------------------------- */
+
+.reveal:not(.visible) {
+    transition-delay: 0s;
+}
+
+
+/* ---------------------------------------------------------
+   STAGGER NHẸ KHI XUẤT HIỆN
+--------------------------------------------------------- */
+
+.reveal.visible:nth-child(1) {
+    transition-delay: .00s;
+}
+
+.reveal.visible:nth-child(2) {
+    transition-delay: .06s;
+}
+
+.reveal.visible:nth-child(3) {
+    transition-delay: .12s;
+}
+
+.reveal.visible:nth-child(4) {
+    transition-delay: .18s;
+}
+
+.reveal.visible:nth-child(5) {
+    transition-delay: .24s;
+}
+
+
+/* ---------------------------------------------------------
+   MOBILE
+--------------------------------------------------------- */
+
+@media (max-width: 700px) {
+
+    .reveal {
+        transform:
+            translate3d(0, 24px, 0)
+            scale(.99);
+
+        filter: blur(5px);
+
+        transition:
+            opacity .6s ease,
+            transform .7s cubic-bezier(.22, 1, .36, 1),
+            filter .6s ease;
+    }
+
+    .reveal.reveal-from-top:not(.visible) {
+        transform:
+            translate3d(0, -24px, 0)
+            scale(.99);
+    }
+
+}
