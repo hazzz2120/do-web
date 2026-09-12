@@ -1122,13 +1122,13 @@ const playlist = [
     {
         title: 'Túy ÂM',
         artist: 'Masew',
-        src: 'music/TN.mp3'
+        src: 'music/tuyam.mp3'
     },
 
     {
         title: 'The Night',
         artist: 'Avicii',
-        src: 'music/tuyam.mp3'
+        src: 'music/TN.mp3'
     }
 
 ];
