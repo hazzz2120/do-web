@@ -258,36 +258,84 @@ $$('.magnetic').forEach((el) => {
 /* SKILLS */
 
 const skills = {
-  web: [
-    'c++',
-    'lập trình thi đấu - competitive programming',
-    '36%'
-  ],
+    web: [
+        'WEB',
+        'gemini - chatgpt - claude',
+        '95%'
+    ],
 
-  design: [
-    'lập trình',
-    'học các ngôn ngữ lập trình',
-    '9%'
-  ],
+    design: [
+        'LẬP TRÌNH',
+        'C++ · HTML · CSS · JavaScript',
+        '15%'
+    ],
 
-  motion: [
-    'lập trình thi đấu',
-    'Giải thuật · Tư duy logic',
-    '10%'
-  ],
+    motion: [
+        'LẬP TRÌNH THI ĐẤU',
+        'Thuật toán · tư duy logic · giải thuật',
+        '20%'
+    ],
 
-  photo: [
-    'đạp xe',
-    'roadbike',
-    '67%'
-  ],
+    photo: [
+        'ĐẠP XE',
+        'Khám phá · thư giãn · vận động',
+        '67%'
+    ],
 
-  content: [
-    'chatgpt',
-    'nole chatgpt',
-    '100%'
-  ]
+    content: [
+        'CHATGPT',
+        'AI · ChatGPT · Claude · AI tools',
+        '100%'
+    ]
 };
+
+const skillNodes = $$('.skill-node');
+
+skillNodes.forEach((node) => {
+
+    node.addEventListener('pointerdown', (event) => {
+        event.stopPropagation();
+    });
+
+    node.addEventListener('click', (event) => {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        const skill = skills[node.dataset.skill];
+
+        if (!skill) {
+            return;
+        }
+
+        skillNodes.forEach((item) => {
+            item.classList.remove('active');
+        });
+
+        node.classList.add('active');
+
+        const title = $('#skillTitle');
+        const text = $('#skillText');
+        const percent = $('#skillPercent');
+        const bar = $('#skillBar');
+
+        if (title) {
+            title.textContent = skill[0];
+        }
+
+        if (text) {
+            text.textContent = skill[1];
+        }
+
+        if (percent) {
+            percent.textContent = skill[2];
+        }
+
+        if (bar) {
+            bar.style.width = skill[2];
+        }
+    });
+});
 
 $$('.skill-node').forEach((node) => {
   node.addEventListener('click', () => {
