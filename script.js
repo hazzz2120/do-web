@@ -1,9 +1,8 @@
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
-/* =========================================================
-   LOADER
-========================================================= */
+
+/* LOADER */
 
 const loader = $('#loader');
 const loaderPct = $('#loaderPct');
@@ -35,9 +34,7 @@ const boot = setInterval(() => {
 }, 90);
 
 
-/* =========================================================
-   BACKGROUND PARTICLES / STARS
-========================================================= */
+/* BACKGROUND */
 
 const canvas = $('#space');
 
@@ -102,9 +99,7 @@ if (canvas) {
 }
 
 
-/* =========================================================
-   CUSTOM CURSOR
-========================================================= */
+/* CUSTOM CURSOR */
 
 let mx = window.innerWidth / 2;
 let my = window.innerHeight / 2;
@@ -146,8 +141,6 @@ function cursorLoop() {
 cursorLoop();
 
 
-/* Cursor hover effect */
-
 $$('a, button, .tilt, .social-card').forEach((el) => {
   el.addEventListener('mouseenter', () => {
     if (ring) {
@@ -173,9 +166,7 @@ $$('a, button, .tilt, .social-card').forEach((el) => {
 });
 
 
-/* =========================================================
-   SCROLL REVEAL
-========================================================= */
+/* SCROLL REVEAL */
 
 const io = new IntersectionObserver(
   (entries) => {
@@ -193,18 +184,18 @@ const io = new IntersectionObserver(
 $$('.reveal').forEach((el) => io.observe(el));
 
 
-/* =========================================================
-   SCROLL PROGRESS
-========================================================= */
+/* SCROLL PROGRESS */
 
 window.addEventListener('scroll', () => {
   const progress = $('#progress');
   const topbar = $('#topbar');
 
-  const h = document.documentElement.scrollHeight - window.innerHeight;
+  const h =
+    document.documentElement.scrollHeight - window.innerHeight;
 
   if (progress && h > 0) {
-    progress.style.height = ((window.scrollY / h) * 100) + '%';
+    progress.style.height =
+      ((window.scrollY / h) * 100) + '%';
   }
 
   if (topbar) {
@@ -216,16 +207,17 @@ window.addEventListener('scroll', () => {
 });
 
 
-/* =========================================================
-   3D CARD TILT
-========================================================= */
+/* 3D TILT */
 
 $$('.tilt').forEach((card) => {
   card.addEventListener('mousemove', (e) => {
     const r = card.getBoundingClientRect();
 
-    const x = (e.clientX - r.left) / r.width - 0.5;
-    const y = (e.clientY - r.top) / r.height - 0.5;
+    const x =
+      (e.clientX - r.left) / r.width - 0.5;
+
+    const y =
+      (e.clientY - r.top) / r.height - 0.5;
 
     card.style.transform = `
       perspective(900px)
@@ -241,9 +233,7 @@ $$('.tilt').forEach((card) => {
 });
 
 
-/* =========================================================
-   MAGNETIC BUTTONS
-========================================================= */
+/* MAGNETIC */
 
 $$('.magnetic').forEach((el) => {
   el.addEventListener('mousemove', (e) => {
@@ -255,7 +245,8 @@ $$('.magnetic').forEach((el) => {
     const y =
       (e.clientY - (r.top + r.height / 2)) * 0.08;
 
-    el.style.transform = `translate(${x}px, ${y}px)`;
+    el.style.transform =
+      `translate(${x}px, ${y}px)`;
   });
 
   el.addEventListener('mouseleave', () => {
@@ -264,9 +255,7 @@ $$('.magnetic').forEach((el) => {
 });
 
 
-/* =========================================================
-   SKILL SWITCHER
-========================================================= */
+/* SKILLS */
 
 const skills = {
   web: [
@@ -302,7 +291,8 @@ const skills = {
 
 $$('.skill-node').forEach((node) => {
   node.addEventListener('click', () => {
-    const skill = skills[node.dataset.skill];
+    const skill =
+      skills[node.dataset.skill];
 
     if (!skill) return;
 
@@ -336,14 +326,14 @@ $$('.skill-node').forEach((node) => {
 });
 
 
-/* =========================================================
-   COPY LINK
-========================================================= */
+/* COPY */
 
 $$('.copy-btn').forEach((btn) => {
   btn.addEventListener('click', async () => {
     try {
-      await navigator.clipboard.writeText(btn.dataset.copy);
+      await navigator.clipboard.writeText(
+        btn.dataset.copy
+      );
 
       const toast = $('#toast');
 
@@ -361,171 +351,185 @@ $$('.copy-btn').forEach((btn) => {
 });
 
 
-/* =========================================================
-   MUSIC PLAYER / VISUALIZER
-========================================================= */
+/* MUSIC PLAYER */
 
-const playBtn = $('#playBtn');
-const prevBtn = $('#prevBtn');
-const nextBtn = $('#nextBtn');
+const playBtn = $('#playlistPlay');
+const prevBtn = $('#playlistPrev');
+const nextBtn = $('#playlistNext');
 
-const audioPlayer = $('#audioPlayer');
+const audioPlayer = $('#playlistAudio');
 
-const musicTitle = $('#musicTitle');
-const musicArtist = $('#musicArtist');
+const musicTitle = $('#playlistTitle');
+const musicArtist = $('#playlistArtist');
+const musicCount = $('#playlistCount');
 
-const waveBars = $$('.wave i');
+const waveBars = $$('#playlistWave i');
 
 
 const playlist = [
-    {
-        title: 'Bài hát số 1',
-        artist: 'Nghệ sĩ 1',
-        src: 'music/bai-1.mp3'
-    },
+  {
+    title: '2gsang',
+    artist: 'Obito',
+    src: 'music/2gsang.mp3'
+  },
 
-    {
-        title: 'Bài hát số 2',
-        artist: 'Nghệ sĩ 2',
-        src: 'music/bai-2.mp3'
-    },
+  {
+    title: 'túy âm',
+    artist: 'masew',
+    src: 'music/tuyam.mp3'
+  },
 
-    {
-        title: 'Bài hát số 3',
-        artist: 'Nghệ sĩ 3',
-        src: 'music/bai-3.mp3'
-    },
+  {
+    title: 'cảm ơn',
+    artist: 'MCK',
+    src: 'music/camon.mp3'
+  },
 
-    {
-        title: 'Bài hát số 4',
-        artist: 'Nghệ sĩ 4',
-        src: 'music/bai-4.mp3'
-    }
+  {
+    title: 'The Night',
+    artist: 'Avicii',
+    src: 'music/TN.mp3'
+  }
 ];
 
 
 let currentSong = 0;
 
 
-function loadSong(index, autoPlay = false) {
-    currentSong = index;
-
-    const song = playlist[currentSong];
-
-    audioPlayer.src = song.src;
-
-    musicTitle.textContent = song.title;
-    musicArtist.textContent = song.artist;
-
-    if (autoPlay) {
-        audioPlayer.play();
-        setPlayingUI();
-    } else {
-        setPausedUI();
-    }
-}
-
-
 function setPlayingUI() {
+  if (playBtn) {
     playBtn.textContent = '❚❚';
+  }
 
-    waveBars.forEach((bar, index) => {
-        bar.style.animation =
-            `bar .7s ease-in-out infinite alternate ${index * -0.08}s`;
-    });
+  waveBars.forEach((bar, index) => {
+    bar.style.animation =
+      `bar .7s ease-in-out infinite alternate ${index * -0.08}s`;
+  });
 }
 
 
 function setPausedUI() {
+  if (playBtn) {
     playBtn.textContent = '▶';
+  }
 
-    waveBars.forEach((bar) => {
-        bar.style.animation = '';
-    });
+  waveBars.forEach((bar) => {
+    bar.style.animation = '';
+  });
 }
 
 
-/* Play / Pause */
+function loadSong(index, autoPlay = false) {
 
-if (playBtn) {
-    playBtn.addEventListener('click', () => {
+  if (!audioPlayer || playlist.length === 0) {
+    return;
+  }
 
-        if (audioPlayer.paused) {
+  currentSong =
+    (index + playlist.length) % playlist.length;
 
-            audioPlayer.play();
+  const song = playlist[currentSong];
 
-            setPlayingUI();
+  audioPlayer.src = song.src;
 
-        } else {
+  if (musicTitle) {
+    musicTitle.textContent = song.title;
+  }
 
-            audioPlayer.pause();
+  if (musicArtist) {
+    musicArtist.textContent = song.artist;
+  }
 
-            setPausedUI();
-        }
+  if (musicCount) {
+    musicCount.textContent =
+      String(currentSong + 1).padStart(2, '0') +
+      ' / ' +
+      String(playlist.length).padStart(2, '0');
+  }
 
-    });
+  setPausedUI();
+
+  if (autoPlay) {
+    audioPlayer
+      .play()
+      .then(() => {
+        setPlayingUI();
+      })
+      .catch((error) => {
+        console.warn(
+          'Không thể phát bài hát:',
+          error
+        );
+      });
+  }
 }
 
 
-/* Next */
+if (playBtn && audioPlayer) {
 
-if (nextBtn) {
-    nextBtn.addEventListener('click', () => {
+  playBtn.addEventListener('click', () => {
 
-        currentSong++;
+    if (audioPlayer.paused) {
 
-        if (currentSong >= playlist.length) {
-            currentSong = 0;
-        }
+      audioPlayer
+        .play()
+        .then(() => {
+          setPlayingUI();
+        })
+        .catch((error) => {
+          console.warn(
+            'Không thể phát bài hát:',
+            error
+          );
+        });
 
-        loadSong(currentSong, true);
+    } else {
 
-    });
-}
+      audioPlayer.pause();
 
-
-/* Previous */
-
-if (prevBtn) {
-    prevBtn.addEventListener('click', () => {
-
-        currentSong--;
-
-        if (currentSong < 0) {
-            currentSong = playlist.length - 1;
-        }
-
-        loadSong(currentSong, true);
-
-    });
-}
-
-
-/* Tự chuyển bài khi bài hiện tại kết thúc */
-
-audioPlayer.addEventListener('ended', () => {
-
-    currentSong++;
-
-    if (currentSong >= playlist.length) {
-        currentSong = 0;
+      setPausedUI();
     }
 
-    loadSong(currentSong, true);
+  });
 
-});
+}
 
 
-/* Load bài đầu tiên */
+if (nextBtn && audioPlayer) {
+
+  nextBtn.addEventListener('click', () => {
+    loadSong(currentSong + 1, true);
+  });
+
+}
+
+
+if (prevBtn && audioPlayer) {
+
+  prevBtn.addEventListener('click', () => {
+    loadSong(currentSong - 1, true);
+  });
+
+}
+
+
+if (audioPlayer) {
+
+  audioPlayer.addEventListener('ended', () => {
+    loadSong(currentSong + 1, true);
+  });
+
+}
+
 
 loadSong(0);
 
 
-/* Dynamic keyframes */
+/* MUSIC ANIMATION */
 
-const style = document.createElement('style');
+const musicStyle = document.createElement('style');
 
-style.textContent = `
+musicStyle.textContent = `
 @keyframes bar {
   from {
     transform: scaleY(.35);
@@ -537,19 +541,19 @@ style.textContent = `
 }
 `;
 
-document.head.appendChild(style);
+document.head.appendChild(musicStyle);
 
 
-/* =========================================================
-   THEME EFFECT TOGGLE
-========================================================= */
+/* THEME */
 
 let alt = false;
 
 const themeBtn = $('#themeBtn');
 
 if (themeBtn) {
+
   themeBtn.addEventListener('click', () => {
+
     alt = !alt;
 
     document.documentElement.style.setProperty(
@@ -557,58 +561,64 @@ if (themeBtn) {
       alt ? '#22d3ee' : '#8b5cf6'
     );
 
-    document.body.style.filter = alt
-      ? 'hue-rotate(18deg)'
-      : '';
+    document.body.style.filter =
+      alt ? 'hue-rotate(18deg)' : '';
+
   });
+
 }
 
 
-/* =========================================================
-   SOUND BUTTON
-========================================================= */
+/* SOUND */
 
 const soundBtn = $('#soundBtn');
 
 if (soundBtn) {
+
   soundBtn.addEventListener('click', () => {
+
     const toast = $('#toast');
 
     if (!toast) return;
 
-    toast.textContent = 'Sound UI ready · add your audio file';
+    toast.textContent =
+      'Sound UI ready · add your audio file';
 
     toast.classList.add('show');
 
     setTimeout(() => {
+
       toast.classList.remove('show');
+
       toast.textContent = 'Copied ✓';
+
     }, 1800);
+
   });
+
 }
 
 
-/* =========================================================
-   CURRENT YEAR
-========================================================= */
+/* YEAR */
 
 const year = $('#year');
 
 if (year) {
-  year.textContent = new Date().getFullYear();
+  year.textContent =
+    new Date().getFullYear();
 }
 
 
-/* =========================================================
-   CLICK RIPPLE
-========================================================= */
+/* RIPPLE */
 
 window.addEventListener('click', (e) => {
+
   if (!e.target.closest('button, a')) {
     return;
   }
 
-  const ripple = document.createElement('span');
+  const ripple =
+    document.createElement('span');
 
   ripple.className = 'ripple';
 
@@ -631,12 +641,14 @@ window.addEventListener('click', (e) => {
   setTimeout(() => {
     ripple.remove();
   }, 700);
+
 });
 
 
-/* Ripple animation */
+/* RIPPLE ANIMATION */
 
-const rippleStyle = document.createElement('style');
+const rippleStyle =
+  document.createElement('style');
 
 rippleStyle.textContent = `
 @keyframes ripple {
