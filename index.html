@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#09051a" />
+  <meta name="description" content="Trang cá nhân phong cách fantasy / cyber-night — một không gian giới thiệu bản thân." />
+  <title>Đinh Việt Anh — Personal Universe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="loader" id="loader">
+    <div class="loader-orbit"></div>
+    <div class="loader-text"><span id="loaderPct">0</span>%</div>
+  </div>
+
+  <canvas id="space"></canvas>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+  <div class="noise"></div>
+
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <div class="cursor-label" id="cursorLabel">khám phá</div>
+
+  <header class="nav glass" id="topbar">
+    <a class="brand" href="#home" aria-label="Home">
+      <span class="brand-mark">Y</span>
+      <span>MY<span class="muted">.WORLD</span></span>
+    </a>
+    <nav class="nav-links">
+      <a href="#about">về toi</a>
+      <a href="#skills">kỹ năng</a>
+      <a href="#projects">dự án</a>
+      <a href="#links">Links</a>
+      <a href="#contact">liên hệ</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="icon-btn" id="soundBtn" title="Âm thanh">◒</button>
+      <button class="icon-btn" id="themeBtn" title="Đổi hiệu ứng">✦</button>
+      <a class="cta-mini" href="#links">kết nối <span>↗</span></a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero section" id="home">
+      <div class="hero-art" aria-hidden="true">
+        <div class="moon"></div>
+        <div class="moon-halo"></div>
+        <div class="cloud cloud-1"></div>
+        <div class="cloud cloud-2"></div>
+        <div class="cloud cloud-3"></div>
+        <div class="orbit orbit-1"></div>
+        <div class="orbit orbit-2"></div>
+      </div>
+
+      <div class="hero-copy reveal">
+        <p class="eyebrow"><span></span> Welcome to my universe</p>
+        <h1>Xin chào, mình là <span class="gradient-text" data-name="Đinh Việt Anh">Đinh Việt Anh</span>.</h1>
+        <p class="hero-desc">Một người thích <strong>code</strong>, thiết kế và biến những ý tưởng nhỏ thành những trải nghiệm web có cá tính.</p>
+        <div class="hero-pills">
+          <span>✦ Front-end</span><span>◈ Creative</span><span>☾ Night Owl</span>
+        </div>
+        <div class="hero-actions">
+          <a class="btn primary magnetic" href="#about">Khám phá mình <span>↓</span></a>
+          <a class="btn glass magnetic" href="#links">Mạng xã hội <span>↗</span></a>
+        </div>
+        <div class="quick-stats">
+          <div><strong>01+</strong><span>Năm học / làm</span></div>
+          <div><strong>2</strong><span>Dự án</span></div>
+          <div><strong>∞</strong><span>Ý tưởng</span></div>
+        </div>
+      </div>
+
+      <div class="hero-card-wrap reveal delay-2">
+        <div class="profile-card tilt glass" id="profileCard">
+          <div class="profile-card-top">
+            <span class="status-dot"></span> available for collabs
+            <button class="more">•••</button>
+          </div>
+          <div class="avatar-shell">
+            <div class="avatar-ring"></div>
+            <div class="avatar-core">Y</div>
+          </div>
+          <h2>Đinh Việt Anh</h2>
+          <p class="role">newbie Developer · coder</p>
+          <div class="location">⌁ Việt Nam · UTC+7</div>
+          <div class="music-card" id="musicCard">
+            <div class="album-orb"></div>
+            <div class="track-meta"><strong>The Night</strong><span>Your favorite playlist</span></div>
+            <button id="playBtn" class="play">▶</button>
+            <div class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-pad" id="about">
+      <div class="section-head reveal"><span class="section-kicker">01 / ABOUT</span><h2>Một chút về mình</h2><p>Không chỉ là một profile page — đây là nơi gom những điều tạo nên mình.</p></div>
+      <div class="about-grid">
+        <article class="story-card glass reveal">
+          <div class="card-icon">✦</div>
+          <h3>Mình đang làm gì?</h3>
+          <p>toi thích lập trình, đang theo đuổi lập trình thi đấu để tham gia các kì thi hsg tin cấp tỉnh.</p>
+          <div class="tag-row"><span>c++</span><span>đạp xe</span><span>Web</span>
+        </article>
+        <article class="story-card glass reveal delay-1">
+          <div class="card-icon">⌁</div>
+          <h3>Tính cách</h3>
+          <p> toi hay tò mò về công nghệ, thích học cái mới và thường làm mọi thứ đến khi cảm thấy ổn.</p>
+          <div class="meter"><div><span>c++</span><b>30%</b></div><i><em style="width:30%"></em></i></div>
+          <div class="meter"><div><span>chatgpt</span><b>91%</b></div><i><em style="width:91%"></em></i></div>
+        </article>
+        <article class="story-card glass reveal delay-2">
+          <div class="card-icon">◉</div>
+          <h3>Điều toi theo đuổi</h3>
+          <ul class="clean-list"><li><span>01</span> Làm sản phẩm khiến người dùng nhớ.</li><li><span>02</span> code ổn.</li><li><span>03</span> Tạo trải nghiệm thật có cảm xúc.</li></ul> <span>04 </span> kiếm tiền. </li></ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section section-pad" id="skills">
+      <div class="section-head reveal"><span class="section-kicker">02 / SKILLS</span><h2>Những thứ mình thích</h2><p>Chọn một skill để xem mô tả nhanh.</p></div>
+      <div class="skill-orbit reveal">
+        <button class="skill-node active" style="--x: 50%;--y: 12%" data-skill="web">c++</button>
+        <button class="skill-node" style="--x: 82%;--y: 34%" data-skill="design">lập trình</button>
+        <button class="skill-node" style="--x: 73%;--y: 78%" data-skill="motion">lập trình thi đấu</button>
+        <button class="skill-node" style="--x: 25%;--y: 78%" data-skill="photo">đạp xe</button>
+        <button class="skill-node" style="--x: 18%;--y: 35%" data-skill="content">chatgpt</button>
+        <div class="skill-core glass"><span id="skillTitle">WEB</span><p id="skillText">c++ - chatgpt - claude</p><div class="skill-line"><i id="skillBar"></i></div><b id="skillPercent">94%</b></div>
+      </div>
+    </section>
+
+<section class="section section-pad" id="projects">
+  <div class="section-head reveal">
+    <span class="section-kicker">03 / PROJECT</span>
+    <h2>Dự án mình đã làm</h2>
+    <p>Một dự án nổi bật mà mình muốn chia sẻ với bạn.</p>
+  </div>
+
+  <div class="project-grid">
+    <article class="project-card glass tilt reveal">
+      <div class="project-visual v1 project-main">
+        <span>01 · FEATURED PROJECT</span>
+        <strong>THANH XUÂN 9A2</strong>
+        <div class="project-site-badge">class-9a2.pages.dev ↗</div>
+      </div>
+
+      <div class="project-body">
+        <span>Website · Memory / Community</span>
+
+        <h3>Thanh Xuân 9A2</h3>
+
+        <p>
+          Website lưu giữ kỷ niệm của lớp 9A2 với thành viên,
+          khoảnh khắc, dòng thời gian, lưu bút và playlist.
+          Giao diện tập trung vào cảm giác hoài niệm và trải nghiệm tương tác.
+        </p>
+
+        <a
+          href="https://class-9a2.pages.dev/"
+          class="text-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Mở website ↗
+        </a>
+      </div>
+    </article>
+  </div>
+</section>
+
+    <section class="section section-pad" id="links">
+      <div class="section-head reveal"><span class="section-kicker">04 / FIND ME</span><h2>Mạng xã hội & liên kết</h2><p>Một chạm để mở đúng nơi bạn muốn xem mình hoạt động.</p></div>
+      <div class="links-grid">
+        <a class="social-card glass magnetic reveal" href="https://www.facebook.com/z.vianh/" target="_blank"><span class="social-icon">f</span><span><b>Facebook</b><small>@vianh</small></span><em>↗</em></a>
+        <a class="social-card glass magnetic reveal delay-2" href="https://www.tiktok.com/@_vianh_03" target="_blank"><span class="social-icon">♪</span><span><b>TikTok</b><small>@_vianh_03</small></span><em>↗</em></a>
+      </div>
+    </section>
+
+    <section class="section section-pad contact-section" id="contact">
+      <div class="contact-panel glass reveal">
+        <div><span class="section-kicker">05 / hợp tác?</span><h2>muốn tạo web, trường, lớp, giới thiệu bản thân,...</h2><p>liên hệ những mạng xã hội ở trên để nhắn tin, liên hệ.</p></div>
+        <a class="btn primary magnetic" href="https://www.facebook.com/z.vianh/">Nhắn cho mình <span>↗</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer section-pad"><div><strong>Đinh Việt Anh</strong><span>crafted after midnight ✦</span></div><span>© <span id="year"></span> All rights reserved.</span></footer>
+  <div class="scroll-progress"><i id="progress"></i></div>
+  <div class="toast" id="toast">Copied ✓</div>
+
+  <script src="script.js"></script>
+</body>
+</html>
