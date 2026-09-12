@@ -2,7 +2,9 @@ const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
 
-/* LOADER */
+/* =========================================================
+   LOADER
+========================================================= */
 
 const loader = $('#loader');
 const loaderPct = $('#loaderPct');
@@ -37,7 +39,9 @@ const boot = setInterval(() => {
 }, 90);
 
 
-/* BACKGROUND */
+/* =========================================================
+   BACKGROUND
+========================================================= */
 
 const canvas = $('#space');
 
@@ -139,7 +143,9 @@ if (canvas) {
 }
 
 
-/* CUSTOM CURSOR */
+/* =========================================================
+   CUSTOM CURSOR
+========================================================= */
 
 let mx = window.innerWidth / 2;
 let my = window.innerHeight / 2;
@@ -158,19 +164,13 @@ window.addEventListener(
         my = e.clientY;
 
         if (dot) {
-            dot.style.left =
-                mx + 'px';
-
-            dot.style.top =
-                my + 'px';
+            dot.style.left = mx + 'px';
+            dot.style.top = my + 'px';
         }
 
         if (label) {
-            label.style.left =
-                mx + 'px';
-
-            label.style.top =
-                my + 'px';
+            label.style.left = mx + 'px';
+            label.style.top = my + 'px';
         }
     }
 );
@@ -180,11 +180,8 @@ function cursorLoop() {
     ry += (my - ry) * 0.18;
 
     if (ring) {
-        ring.style.left =
-            rx + 'px';
-
-        ring.style.top =
-            ry + 'px';
+        ring.style.left = rx + 'px';
+        ring.style.top = ry + 'px';
     }
 
     requestAnimationFrame(
@@ -197,49 +194,46 @@ cursorLoop();
 
 $$(
     'a, button, .tilt, .social-card'
-).forEach((el) => {
+).forEach(
+    (el) => {
 
-    el.addEventListener(
-        'mouseenter',
-        () => {
+        el.addEventListener(
+            'mouseenter',
+            () => {
 
-            if (ring) {
-                ring.style.width =
-                    '58px';
+                if (ring) {
+                    ring.style.width = '58px';
+                    ring.style.height = '58px';
+                }
 
-                ring.style.height =
-                    '58px';
+                if (label) {
+                    label.style.opacity = '1';
+                }
             }
+        );
 
-            if (label) {
-                label.style.opacity =
-                    '1';
+        el.addEventListener(
+            'mouseleave',
+            () => {
+
+                if (ring) {
+                    ring.style.width = '38px';
+                    ring.style.height = '38px';
+                }
+
+                if (label) {
+                    label.style.opacity = '0';
+                }
             }
-        }
-    );
+        );
 
-    el.addEventListener(
-        'mouseleave',
-        () => {
-
-            if (ring) {
-                ring.style.width =
-                    '38px';
-
-                ring.style.height =
-                    '38px';
-            }
-
-            if (label) {
-                label.style.opacity =
-                    '0';
-            }
-        }
-    );
-});
+    }
+);
 
 
-/* SCROLL REVEAL */
+/* =========================================================
+   SCROLL REVEAL
+========================================================= */
 
 const io =
     new IntersectionObserver(
@@ -270,7 +264,9 @@ $$('.reveal').forEach(
 );
 
 
-/* SCROLL PROGRESS */
+/* =========================================================
+   SCROLL PROGRESS
+========================================================= */
 
 window.addEventListener(
     'scroll',
@@ -291,25 +287,31 @@ window.addEventListener(
             progress &&
             h > 0
         ) {
+
             progress.style.height =
                 (
                     window.scrollY / h *
                     100
                 ) + '%';
+
         }
 
         if (topbar) {
+
             topbar.style.boxShadow =
                 window.scrollY > 40
                     ? '0 16px 55px rgba(0,0,0,.34)'
                     : 'inset 0 1px 0 rgba(255,255,255,.08),var(--shadow)';
+
         }
 
     }
 );
 
 
-/* 3D TILT */
+/* =========================================================
+   3D TILT
+========================================================= */
 
 $$('.tilt').forEach(
     (card) => {
@@ -337,6 +339,7 @@ $$('.tilt').forEach(
                     rotateX(${y * -9}deg)
                     translateY(-4px)
                 `;
+
             }
         );
 
@@ -351,7 +354,9 @@ $$('.tilt').forEach(
 );
 
 
-/* MAGNETIC */
+/* =========================================================
+   MAGNETIC
+========================================================= */
 
 $$('.magnetic').forEach(
     (el) => {
@@ -383,6 +388,7 @@ $$('.magnetic').forEach(
 
                 el.style.transform =
                     `translate(${x}px, ${y}px)`;
+
             }
         );
 
@@ -397,7 +403,9 @@ $$('.magnetic').forEach(
 );
 
 
-/* SKILLS */
+/* =========================================================
+   SKILLS
+========================================================= */
 
 const skills = {
 
@@ -511,7 +519,9 @@ $$('.skill-node').forEach(
 );
 
 
-/* COPY */
+/* =========================================================
+   COPY
+========================================================= */
 
 $$('.copy-btn').forEach(
     (btn) => {
@@ -563,7 +573,9 @@ $$('.copy-btn').forEach(
 );
 
 
-/* MUSIC PLAYER */
+/* =========================================================
+   MUSIC PLAYER
+========================================================= */
 
 const playBtn =
     $('#playlistPlay');
@@ -588,6 +600,7 @@ const musicCount =
 
 const waveBars =
     $$('#playlistWave i');
+
 
 const playlist = [
 
@@ -773,10 +786,12 @@ if (
     nextBtn.addEventListener(
         'click',
         () => {
+
             loadSong(
                 currentSong + 1,
                 true
             );
+
         }
     );
 
@@ -791,10 +806,12 @@ if (
     prevBtn.addEventListener(
         'click',
         () => {
+
             loadSong(
                 currentSong - 1,
                 true
             );
+
         }
     );
 
@@ -806,10 +823,12 @@ if (audioPlayer) {
     audioPlayer.addEventListener(
         'ended',
         () => {
+
             loadSong(
                 currentSong + 1,
                 true
             );
+
         }
     );
 
@@ -819,12 +838,181 @@ if (audioPlayer) {
 loadSong(0);
 
 
-/* THEME BUTTON */
+/* =========================================================
+   COLOR WHEEL
+========================================================= */
+
+const colorWheel =
+    $('#colorWheel');
+
+
+function applyThemeColor(
+    hue
+) {
+
+    const normalizedHue =
+        ((hue % 360) + 360) % 360;
+
+    const purple =
+        `hsl(${normalizedHue} 75% 65%)`;
+
+    const pink =
+        `hsl(${(normalizedHue + 35) % 360} 80% 75%)`;
+
+    const cyan =
+        `hsl(${(normalizedHue + 70) % 360} 85% 70%)`;
+
+    document.documentElement.style.setProperty(
+        '--purple',
+        purple
+    );
+
+    document.documentElement.style.setProperty(
+        '--pink',
+        pink
+    );
+
+    document.documentElement.style.setProperty(
+        '--cyan',
+        cyan
+    );
+
+    document.documentElement.style.setProperty(
+        '--theme-hue',
+        normalizedHue
+    );
+
+}
+
+
+if (colorWheel) {
+
+    colorWheel.addEventListener(
+        'click',
+        (event) => {
+
+            const rect =
+                colorWheel.getBoundingClientRect();
+
+            const centerX =
+                rect.left +
+                rect.width / 2;
+
+            const centerY =
+                rect.top +
+                rect.height / 2;
+
+            const x =
+                event.clientX -
+                centerX;
+
+            const y =
+                event.clientY -
+                centerY;
+
+            let angle =
+                Math.atan2(y, x) *
+                180 /
+                Math.PI;
+
+            angle += 90;
+
+            if (angle < 0) {
+                angle += 360;
+            }
+
+            applyThemeColor(
+                angle
+            );
+
+        }
+    );
+
+
+    colorWheel.addEventListener(
+        'pointermove',
+        (event) => {
+
+            if (
+                event.buttons !== 1
+            ) {
+                return;
+            }
+
+            const rect =
+                colorWheel.getBoundingClientRect();
+
+            const centerX =
+                rect.left +
+                rect.width / 2;
+
+            const centerY =
+                rect.top +
+                rect.height / 2;
+
+            const x =
+                event.clientX -
+                centerX;
+
+            const y =
+                event.clientY -
+                centerY;
+
+            let angle =
+                Math.atan2(y, x) *
+                180 /
+                Math.PI;
+
+            angle += 90;
+
+            if (angle < 0) {
+                angle += 360;
+            }
+
+            applyThemeColor(
+                angle
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   THEME 2 — NEBULA / AURORA
+========================================================= */
 
 let alt = false;
 
 const themeBtn =
     $('#themeBtn');
+
+
+function setTheme2(enabled) {
+
+    document.documentElement.classList.toggle(
+        'theme-nebula',
+        enabled
+    );
+
+    if (themeBtn) {
+
+        themeBtn.classList.toggle(
+            'active',
+            enabled
+        );
+
+    }
+
+}
+
+
+/*
+   Theme 2 không dùng filter cho body.
+   Vì filter trên body sẽ làm cursor fixed bị lỗi
+   khi scroll.
+*/
 
 if (themeBtn) {
 
@@ -834,22 +1022,39 @@ if (themeBtn) {
 
             alt = !alt;
 
-            themeBtn.classList.toggle(
-                'active',
+            setTheme2(
                 alt
             );
 
-            document.documentElement.style.setProperty(
-                '--purple',
-                alt
-                    ? '#22d3ee'
-                    : '#8b5cf6'
-            );
+            const toast =
+                $('#toast');
 
-            document.body.style.filter =
-                alt
-                    ? 'hue-rotate(18deg)'
-                    : '';
+            if (toast) {
+
+                toast.textContent =
+                    alt
+                        ? 'Nebula theme ✦'
+                        : 'Original theme';
+
+                toast.classList.add(
+                    'show'
+                );
+
+                setTimeout(
+                    () => {
+
+                        toast.classList.remove(
+                            'show'
+                        );
+
+                        toast.textContent =
+                            'Copied ✓';
+
+                    },
+                    1200
+                );
+
+            }
 
         }
     );
@@ -857,7 +1062,9 @@ if (themeBtn) {
 }
 
 
-/* SOUND BUTTON */
+/* =========================================================
+   SOUND BUTTON
+========================================================= */
 
 const soundBtn =
     $('#soundBtn');
@@ -910,18 +1117,24 @@ if (soundBtn) {
 }
 
 
-/* YEAR */
+/* =========================================================
+   YEAR
+========================================================= */
 
 const year =
     $('#year');
 
 if (year) {
+
     year.textContent =
         new Date().getFullYear();
+
 }
 
 
-/* RIPPLE */
+/* =========================================================
+   RIPPLE
+========================================================= */
 
 window.addEventListener(
     'click',
@@ -969,26 +1182,4 @@ window.addEventListener(
         );
 
     }
-);
-
-
-/* RIPPLE ANIMATION */
-
-const rippleStyle =
-    document.createElement(
-        'style'
-    );
-
-rippleStyle.textContent = `
-    @keyframes ripple {
-        to {
-            width: 110px;
-            height: 110px;
-            opacity: 0;
-        }
-    }
-`;
-
-document.head.appendChild(
-    rippleStyle
 );
