@@ -905,32 +905,32 @@ const skills = {
 
     web: [
         'WEB',
-        'c++ - chatgpt - claude',
-        '94%'
+        'gemini - chatgpt - claude',
+        '95%'
     ],
 
     design: [
         'LẬP TRÌNH',
         'C++ · HTML · CSS · JavaScript',
-        '89%'
+        '20%'
     ],
 
     motion: [
         'LẬP TRÌNH THI ĐẤU',
         'Thuật toán · tư duy logic · giải thuật',
-        '86%'
+        '15%'
     ],
 
     photo: [
         'ĐẠP XE',
         'Khám phá · thư giãn · vận động',
-        '82%'
+        '67%'
     ],
 
     content: [
         'CHATGPT',
         'AI · ChatGPT · Claude · AI tools',
-        '91%'
+        '100%'
     ]
 
 };
