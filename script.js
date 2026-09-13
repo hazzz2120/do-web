@@ -1754,59 +1754,101 @@ if (themeBtn) {
 
 
 /* =========================================================
-   SOUND BUTTON
+   RANDOM MUSIC BUTTON — ◒
 ========================================================= */
 
 const soundBtn =
     $('#soundBtn');
 
-if (soundBtn) {
+if (
+    soundBtn &&
+    audioPlayer &&
+    playlist.length
+) {
 
     soundBtn.addEventListener(
         'click',
         () => {
 
-            soundBtn.classList.toggle(
+            /*
+               Chọn ngẫu nhiên một bài
+               trong playlist
+            */
+
+            let randomSong;
+
+            do {
+
+                randomSong =
+                    Math.floor(
+                        Math.random() *
+                        playlist.length
+                    );
+
+            } while (
+                playlist.length > 1 &&
+                randomSong === currentSong
+            );
+
+
+            /*
+               Phát bài được chọn
+            */
+
+            loadSong(
+                randomSong,
+                true
+            );
+
+
+            /*
+               Hiệu ứng nút
+            */
+
+            soundBtn.classList.add(
                 'active'
             );
+
+
+            /*
+               Toast
+            */
 
             const toast =
                 $('#toast');
 
-            if (!toast) {
-                return;
+            if (toast) {
+
+                const song =
+                    playlist[randomSong];
+
+                toast.textContent =
+                    `▶ ${song.title}`;
+
+                toast.classList.add(
+                    'show'
+                );
+
+                setTimeout(
+                    () => {
+
+                        toast.classList.remove(
+                            'show'
+                        );
+
+                        toast.textContent =
+                            'Copied ✓';
+
+                    },
+                    1400
+                );
+
             }
-
-            toast.textContent =
-                soundBtn.classList.contains(
-                    'active'
-                )
-                    ? 'Sound ON'
-                    : 'Sound OFF';
-
-            toast.classList.add(
-                'show'
-            );
-
-            setTimeout(
-                () => {
-
-                    toast.classList.remove(
-                        'show'
-                    );
-
-                    toast.textContent =
-                        'Copied ✓';
-
-                },
-                1200
-            );
 
         }
     );
 
 }
-
 
 /* =========================================================
    YEAR
