@@ -206,7 +206,7 @@ button {
     position:absolute;
     inset:5% -15% auto;
     height:76vh;
-    overflow:hidden;
+    overflow:visible;
     z-index:-1;
 }
 
@@ -2291,3 +2291,2808 @@ html.theme-nebula #themeBtn.active {
         0 0 25px
         rgba(139, 92, 246, .08);
 }}
+
+/* =========================================================
+   PROJECT SHOWCASE 3D
+========================================================= */
+
+.project-card {
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+    transform-style: preserve-3d;
+    transition:
+        transform .25s cubic-bezier(.22, 1, .36, 1),
+        box-shadow .35s ease,
+        border-color .35s ease;
+}
+
+
+/* -----------------------------------------
+   PROJECT VISUAL
+----------------------------------------- */
+
+.project-visual {
+    position: relative;
+    overflow: hidden;
+    transform-style: preserve-3d;
+}
+
+
+.project-main::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            135deg,
+            transparent 25%,
+            rgba(255,255,255,.07) 50%,
+            transparent 75%
+        );
+
+    transform:
+        translateX(-120%);
+
+    transition:
+        transform .8s cubic-bezier(.22, 1, .36, 1);
+
+    pointer-events: none;
+}
+
+
+.project-card:hover .project-main::after {
+    transform:
+        translateX(120%);
+}
+
+
+/* -----------------------------------------
+   HOVER OVERLAY
+----------------------------------------- */
+
+.project-hover {
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(139,92,246,.20),
+            rgba(5,3,11,.76)
+        );
+
+    opacity: 0;
+
+    transform:
+        scale(.94);
+
+    transition:
+        opacity .4s ease,
+        transform .45s cubic-bezier(.22, 1, .36, 1);
+
+    pointer-events: none;
+
+    z-index: 5;
+}
+
+
+.project-card:hover .project-hover {
+    opacity: 1;
+
+    transform:
+        scale(1);
+}
+
+
+.project-hover span {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+}
+
+
+.project-hover-icon {
+    width: 56px;
+    height: 56px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border:
+        1px solid
+        rgba(255,255,255,.22);
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,.06);
+
+    box-shadow:
+        0 0 30px
+        rgba(139,92,246,.35);
+
+    font-size: 22px;
+
+    transform:
+        translateY(8px);
+
+    transition:
+        transform .45s cubic-bezier(.22, 1, .36, 1);
+}
+
+
+.project-card:hover
+.project-hover-icon {
+    transform:
+        translateY(0)
+        rotate(8deg);
+}
+
+
+/* -----------------------------------------
+   PROJECT SITE BADGE
+----------------------------------------- */
+
+.project-site-badge {
+    position: relative;
+    z-index: 3;
+
+    transition:
+        transform .4s cubic-bezier(.22, 1, .36, 1),
+        opacity .3s ease;
+}
+
+
+.project-card:hover
+.project-site-badge {
+    transform:
+        translateY(-4px);
+}
+
+
+/* -----------------------------------------
+   PROJECT BODY
+----------------------------------------- */
+
+.project-body {
+    position: relative;
+    z-index: 4;
+}
+
+
+.project-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+}
+
+
+/* -----------------------------------------
+   PREVIEW BUTTON
+----------------------------------------- */
+
+.project-preview-btn {
+    appearance: none;
+    border: 1px solid var(--line);
+
+    background:
+        rgba(255,255,255,.045);
+
+    color: inherit;
+
+    border-radius: 999px;
+
+    padding:
+        9px 14px;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    font:
+        inherit;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    cursor: none;
+
+    transition:
+        transform .25s ease,
+        background .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease;
+}
+
+
+.project-preview-btn:hover {
+    transform:
+        translateY(-2px);
+
+    background:
+        rgba(139,92,246,.12);
+
+    border-color:
+        rgba(139,92,246,.42);
+
+    box-shadow:
+        0 0 24px
+        rgba(139,92,246,.14);
+}
+
+
+.project-preview-btn span {
+    font-size: 14px;
+}
+
+
+/* -----------------------------------------
+   PROJECT CARD HOVER
+----------------------------------------- */
+
+.project-card:hover {
+    border-color:
+        rgba(139,92,246,.32);
+
+    box-shadow:
+        0 25px 80px
+        rgba(0,0,0,.35),
+        0 0 45px
+        rgba(139,92,246,.12);
+}
+
+
+/* -----------------------------------------
+   FULLSCREEN PROJECT PREVIEW
+----------------------------------------- */
+
+.project-modal {
+    position: fixed;
+    inset: 0;
+
+    z-index: 999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+
+    background:
+        rgba(2,1,7,.82);
+
+    backdrop-filter:
+        blur(18px);
+
+    -webkit-backdrop-filter:
+        blur(18px);
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition:
+        opacity .35s ease,
+        visibility .35s ease;
+}
+
+
+.project-modal.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+/* -----------------------------------------
+   MODAL WINDOW
+----------------------------------------- */
+
+.project-modal-window {
+    width:
+        min(1400px, 96vw);
+
+    height:
+        min(860px, 92vh);
+
+    display:
+        grid;
+
+    grid-template-rows:
+        auto 1fr;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        rgba(255,255,255,.14);
+
+    border-radius:
+        24px;
+
+    background:
+        rgba(8,5,18,.94);
+
+    box-shadow:
+        0 35px 120px
+        rgba(0,0,0,.55),
+        0 0 80px
+        rgba(139,92,246,.12);
+
+    transform:
+        translateY(22px)
+        scale(.97);
+
+    transition:
+        transform .45s cubic-bezier(.22, 1, .36, 1);
+}
+
+
+.project-modal.open
+.project-modal-window {
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+
+/* -----------------------------------------
+   MODAL HEADER
+----------------------------------------- */
+
+.project-modal-header {
+    min-height: 58px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap: 16px;
+
+    padding:
+        10px 14px 10px 18px;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.08);
+
+    background:
+        rgba(255,255,255,.025);
+}
+
+
+.project-modal-title {
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    min-width: 0;
+}
+
+
+.project-modal-title strong {
+    font-size: 13px;
+    letter-spacing: .06em;
+}
+
+
+.project-modal-title span {
+    margin-top: 3px;
+
+    font-size: 10px;
+
+    color:
+        rgba(255,255,255,.48);
+}
+
+
+/* -----------------------------------------
+   MODAL ACTIONS
+----------------------------------------- */
+
+.project-modal-actions {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap: 8px;
+}
+
+
+.project-modal-open {
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap: 7px;
+
+    padding:
+        8px 12px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.1);
+
+    border-radius:
+        999px;
+
+    color:
+        rgba(255,255,255,.8);
+
+    text-decoration:
+        none;
+
+    font-size:
+        10px;
+
+    font-weight:
+        700;
+
+    transition:
+        background .25s ease,
+        border-color .25s ease;
+}
+
+
+.project-modal-open:hover {
+    background:
+        rgba(139,92,246,.12);
+
+    border-color:
+        rgba(139,92,246,.35);
+}
+
+
+.project-modal-close {
+    width: 38px;
+    height: 38px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border:
+        1px solid
+        rgba(255,255,255,.1);
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(255,255,255,.045);
+
+    color:
+        white;
+
+    font-size:
+        19px;
+
+    cursor:
+        none;
+
+    transition:
+        transform .25s ease,
+        background .25s ease,
+        border-color .25s ease;
+}
+
+
+.project-modal-close:hover {
+    transform:
+        rotate(90deg);
+
+    background:
+        rgba(236,72,153,.10);
+
+    border-color:
+        rgba(236,72,153,.35);
+}
+
+
+/* -----------------------------------------
+   IFRAME
+----------------------------------------- */
+
+.project-modal-frame {
+    position:
+        relative;
+
+    min-height:
+        0;
+
+    background:
+        #05030b;
+}
+
+
+.project-modal-frame iframe {
+    width:
+        100%;
+
+    height:
+        100%;
+
+    display:
+        block;
+
+    border:
+        0;
+
+    background:
+        #05030b;
+}
+
+
+/* -----------------------------------------
+   LOADING LINE
+----------------------------------------- */
+
+.project-frame-loader {
+    position:
+        absolute;
+
+    left:
+        0;
+
+    right:
+        0;
+
+    top:
+        0;
+
+    height:
+        2px;
+
+    overflow:
+        hidden;
+
+    background:
+        rgba(255,255,255,.04);
+
+    pointer-events:
+        none;
+}
+
+
+.project-frame-loader::after {
+    content: "";
+
+    position:
+        absolute;
+
+    top:
+        0;
+
+    left:
+        -40%;
+
+    width:
+        40%;
+
+    height:
+        100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--purple),
+            var(--pink),
+            transparent
+        );
+
+    animation:
+        projectLoader 1.2s
+        ease-in-out
+        infinite;
+}
+
+
+@keyframes projectLoader {
+
+    0% {
+        transform:
+            translateX(0);
+    }
+
+    100% {
+        transform:
+            translateX(350%);
+    }
+
+}
+
+
+/* -----------------------------------------
+   BODY LOCK
+----------------------------------------- */
+
+html.project-modal-open,
+html.project-modal-open body {
+    overflow:
+        hidden;
+}
+
+
+/* -----------------------------------------
+   MOBILE
+----------------------------------------- */
+
+@media (max-width: 700px) {
+
+    .project-modal {
+        padding:
+            10px;
+    }
+
+    .project-modal-window {
+        width:
+            100%;
+
+        height:
+            94vh;
+
+        border-radius:
+            18px;
+    }
+
+    .project-modal-open {
+        display:
+            none;
+    }
+
+    .project-modal-header {
+        padding:
+            9px 10px 9px 14px;
+    }
+
+    .project-hover {
+        display:
+            none;
+    }
+
+    .project-preview-btn {
+        cursor:
+            pointer;
+    }
+
+}
+
+/* =========================================================
+   FIX CURSOR KHI PROJECT PREVIEW ĐANG MỞ
+========================================================= */
+
+/*
+   Modal nằm ở z-index 999,
+   nên custom cursor phải nằm cao hơn modal.
+*/
+
+.cursor-dot,
+.cursor-ring,
+.cursor-label {
+    position: fixed !important;
+    pointer-events: none !important;
+    z-index: 10050 !important;
+}
+
+
+/* Cursor dot */
+
+.cursor-dot {
+    pointer-events: none !important;
+}
+
+
+/* Cursor ring */
+
+.cursor-ring {
+    pointer-events: none !important;
+}
+
+
+/* Cursor label */
+
+.cursor-label {
+    pointer-events: none !important;
+}
+
+
+/*
+   Đảm bảo modal vẫn nhận click bình thường
+*/
+
+.project-modal {
+    z-index: 999 !important;
+}
+
+
+/*
+   iframe không được phép tranh chấp
+   với custom cursor
+*/
+
+.project-modal-frame iframe {
+    display: block;
+}
+
+
+/*
+   Khi modal mở, body vẫn ẩn cursor gốc,
+   custom cursor sẽ luôn nằm trên cùng.
+*/
+
+html.project-modal-open,
+html.project-modal-open body {
+    cursor: none !important;
+}
+
+
+/*
+   Các nút trong modal vẫn dùng custom cursor
+*/
+
+.project-modal button,
+.project-modal a {
+    cursor: none !important;
+}
+
+/* =========================================================
+   WORLD MAP
+========================================================= */
+
+.world-map {
+    position: fixed;
+    inset: 0;
+
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background:
+        radial-gradient(
+            circle at 50% 50%,
+            rgba(139,92,246,.12),
+            transparent 35%
+        ),
+        rgba(2,1,8,.88);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition:
+        opacity .4s ease,
+        visibility .4s ease;
+}
+
+.world-map.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+/* -----------------------------------------
+   MAP CONTAINER
+----------------------------------------- */
+
+.world-map-inner {
+    position: relative;
+
+    width: min(1000px, 94vw);
+    height: min(720px, 88vh);
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        rgba(255,255,255,.13);
+
+    border-radius: 28px;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(139,92,246,.08),
+            rgba(7,4,15,.94) 60%
+        );
+
+    box-shadow:
+        0 30px 120px rgba(0,0,0,.55),
+        0 0 80px rgba(139,92,246,.12);
+
+    transform:
+        scale(.96)
+        translateY(15px);
+
+    transition:
+        transform .5s
+        cubic-bezier(.22,1,.36,1);
+}
+
+.world-map.open
+.world-map-inner {
+    transform:
+        scale(1)
+        translateY(0);
+}
+
+
+/* -----------------------------------------
+   STARS / GRID
+----------------------------------------- */
+
+.world-map-grid {
+    position: absolute;
+    inset: 0;
+
+    pointer-events: none;
+
+    opacity: .28;
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,.045) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.045) 1px,
+            transparent 1px
+        );
+
+    background-size:
+        55px 55px;
+
+    mask-image:
+        radial-gradient(
+            circle,
+            black 25%,
+            transparent 80%
+        );
+}
+
+
+/* -----------------------------------------
+   HEADER
+----------------------------------------- */
+
+.world-map-header {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 20px;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.07);
+
+    background:
+        rgba(5,3,12,.35);
+}
+
+.world-map-title {
+    display: flex;
+    flex-direction: column;
+}
+
+.world-map-title strong {
+    font-size: 13px;
+    letter-spacing: .15em;
+}
+
+.world-map-title span {
+    margin-top: 4px;
+
+    font-size: 9px;
+
+    letter-spacing: .14em;
+    text-transform: uppercase;
+
+    color:
+        rgba(255,255,255,.42);
+}
+
+.world-map-close {
+    width: 38px;
+    height: 38px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.1);
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,.04);
+
+    color: white;
+
+    font-size: 20px;
+
+    cursor: none;
+
+    transition:
+        transform .25s ease,
+        background .25s ease,
+        border-color .25s ease;
+}
+
+.world-map-close:hover {
+    transform: rotate(90deg);
+
+    background:
+        rgba(236,72,153,.1);
+
+    border-color:
+        rgba(236,72,153,.35);
+}
+
+
+/* -----------------------------------------
+   UNIVERSE
+----------------------------------------- */
+
+.world-universe {
+    position: absolute;
+    inset: 75px 20px 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* -----------------------------------------
+   ORBITS
+----------------------------------------- */
+
+.world-orbit {
+    position: absolute;
+
+    border:
+        1px solid
+        rgba(255,255,255,.07);
+
+    border-radius: 50%;
+
+    pointer-events: none;
+}
+
+.world-orbit-1 {
+    width: 360px;
+    height: 360px;
+}
+
+.world-orbit-2 {
+    width: 580px;
+    height: 380px;
+
+    transform:
+        rotate(-18deg);
+}
+
+
+/* -----------------------------------------
+   CENTER CORE
+----------------------------------------- */
+
+.world-core {
+    position: relative;
+
+    z-index: 10;
+
+    width: 132px;
+    height: 132px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    border:
+        1px solid
+        rgba(255,255,255,.17);
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(139,92,246,.27),
+            rgba(22,10,40,.9) 65%
+        );
+
+    box-shadow:
+        0 0 30px rgba(139,92,246,.3),
+        0 0 100px rgba(139,92,246,.11);
+
+    text-align: center;
+}
+
+.world-core::before {
+    content: "";
+
+    position: absolute;
+    inset: -14px;
+
+    border:
+        1px solid
+        rgba(139,92,246,.16);
+
+    border-radius: 50%;
+
+    animation:
+        worldPulse 3s ease-in-out infinite;
+}
+
+.world-core strong {
+    font-size: 13px;
+    letter-spacing: .16em;
+}
+
+.world-core span {
+    margin-top: 7px;
+
+    font-size: 8px;
+
+    letter-spacing: .17em;
+
+    color:
+        rgba(255,255,255,.43);
+}
+
+@keyframes worldPulse {
+    0%,100% {
+        transform: scale(.96);
+        opacity: .35;
+    }
+
+    50% {
+        transform: scale(1.05);
+        opacity: .9;
+    }
+}
+
+
+/* -----------------------------------------
+   PLANETS
+----------------------------------------- */
+
+.world-node {
+    position: absolute;
+
+    width: 88px;
+    height: 88px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    border:
+        1px solid
+        rgba(255,255,255,.13);
+
+    border-radius: 50%;
+
+    background:
+        rgba(12,8,25,.92);
+
+    color: white;
+
+    cursor: none;
+
+    box-shadow:
+        0 0 18px rgba(139,92,246,.08);
+
+    transition:
+        transform .35s cubic-bezier(.22,1,.36,1),
+        border-color .25s ease,
+        box-shadow .3s ease,
+        background .25s ease;
+}
+
+.world-node span {
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: .13em;
+
+    text-transform: uppercase;
+}
+
+.world-node small {
+    margin-top: 4px;
+
+    font-size: 7px;
+
+    letter-spacing: .08em;
+
+    color:
+        rgba(255,255,255,.38);
+}
+
+.world-node:hover {
+    transform:
+        scale(1.16);
+
+    border-color:
+        rgba(139,92,246,.55);
+
+    background:
+        rgba(139,92,246,.13);
+
+    box-shadow:
+        0 0 25px rgba(139,92,246,.27),
+        0 0 55px rgba(139,92,246,.08);
+}
+
+
+/* -----------------------------------------
+   NODE POSITIONS
+----------------------------------------- */
+
+.world-node-home {
+    top: 8%;
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+}
+
+.world-node-home:hover {
+    transform:
+        translateX(-50%)
+        scale(1.16);
+}
+
+.world-node-about {
+    top: 25%;
+    left: 10%;
+}
+
+.world-node-skills {
+    top: 10%;
+    right: 17%;
+}
+
+.world-node-projects {
+    bottom: 13%;
+    right: 13%;
+}
+
+.world-node-links {
+    bottom: 8%;
+    left: 26%;
+}
+
+.world-node-contact {
+    top: 48%;
+    right: 3%;
+}
+
+
+/* -----------------------------------------
+   CONNECTION LINES
+----------------------------------------- */
+
+.world-line {
+    position: absolute;
+
+    height: 1px;
+
+    transform-origin: left center;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(139,92,246,.28),
+            transparent
+        );
+
+    pointer-events: none;
+}
+
+.world-line-1 {
+    width: 200px;
+
+    top: 35%;
+    left: 25%;
+
+    transform:
+        rotate(-18deg);
+}
+
+.world-line-2 {
+    width: 210px;
+
+    top: 33%;
+    right: 23%;
+
+    transform:
+        rotate(20deg);
+}
+
+.world-line-3 {
+    width: 230px;
+
+    bottom: 27%;
+    left: 31%;
+
+    transform:
+        rotate(14deg);
+}
+
+.world-line-4 {
+    width: 220px;
+
+    bottom: 27%;
+    right: 25%;
+
+    transform:
+        rotate(-14deg);
+}
+
+
+/* -----------------------------------------
+   FOOTER HINT
+----------------------------------------- */
+
+.world-map-hint {
+    position: absolute;
+
+    bottom: 15px;
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    font-size: 8px;
+
+    letter-spacing: .16em;
+
+    text-transform: uppercase;
+
+    color:
+        rgba(255,255,255,.32);
+
+    white-space: nowrap;
+}
+
+
+/* -----------------------------------------
+   THEME
+----------------------------------------- */
+
+html.theme-nebula .world-map {
+    background:
+        radial-gradient(
+            circle at 50% 50%,
+            rgba(139,92,246,.18),
+            transparent 38%
+        ),
+        rgba(2,1,8,.9);
+}
+
+
+/* -----------------------------------------
+   MOBILE
+----------------------------------------- */
+
+@media (max-width: 700px) {
+
+    .world-map {
+        padding: 10px;
+    }
+
+    .world-map-inner {
+        width: 100%;
+        height: 90vh;
+
+        border-radius: 20px;
+    }
+
+    .world-universe {
+        inset: 70px 8px 25px;
+    }
+
+    .world-orbit-1 {
+        width: 220px;
+        height: 220px;
+    }
+
+    .world-orbit-2 {
+        width: 310px;
+        height: 220px;
+    }
+
+    .world-core {
+        width: 100px;
+        height: 100px;
+    }
+
+    .world-node {
+        width: 66px;
+        height: 66px;
+    }
+
+    .world-node span {
+        font-size: 7px;
+    }
+
+    .world-node small {
+        display: none;
+    }
+
+    .world-node-home {
+        top: 8%;
+    }
+
+    .world-node-about {
+        top: 28%;
+        left: 2%;
+    }
+
+    .world-node-skills {
+        top: 20%;
+        right: 2%;
+    }
+
+    .world-node-projects {
+        bottom: 16%;
+        right: 4%;
+    }
+
+    .world-node-links {
+        bottom: 9%;
+        left: 12%;
+    }
+
+    .world-node-contact {
+        top: 49%;
+        right: -2%;
+    }
+
+    .world-line {
+        display: none;
+    }
+
+    .world-map-hint {
+        bottom: 9px;
+    }
+}
+/* =========================================================
+   THEME 3 — HACKER / MATRIX
+========================================================= */
+
+html.theme-hacker {
+    --purple: #39ff14;
+    --pink: #7cff5b;
+    --cyan: #00ff88;
+    --line: rgba(57,255,20,.18);
+}
+
+
+/* -----------------------------------------
+   BACKGROUND
+----------------------------------------- */
+
+html.theme-hacker body {
+    background:
+        radial-gradient(
+            circle at 50% 30%,
+            rgba(57,255,20,.08),
+            transparent 38%
+        ),
+        radial-gradient(
+            circle at 20% 80%,
+            rgba(0,255,136,.06),
+            transparent 30%
+        ),
+        #020603;
+}
+
+
+/* -----------------------------------------
+   MATRIX RAIN CANVAS
+----------------------------------------- */
+
+#matrixRain {
+    position: fixed;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    z-index: -2;
+
+    display: block;
+
+    pointer-events: none;
+
+    opacity: 0;
+
+    transition:
+        opacity .5s ease;
+}
+
+html.theme-hacker #matrixRain {
+    opacity: .32;
+}
+
+
+/* -----------------------------------------
+   SPACE STARS
+----------------------------------------- */
+
+html.theme-hacker #space {
+    filter:
+        saturate(.45)
+        brightness(.65);
+
+    opacity: .55;
+}
+
+
+/* -----------------------------------------
+   AMBIENT
+----------------------------------------- */
+
+html.theme-hacker .ambient {
+    opacity: .20;
+
+    filter:
+        blur(105px)
+        saturate(.5);
+}
+
+html.theme-hacker .ambient-a {
+    background: #39ff14;
+}
+
+html.theme-hacker .ambient-b {
+    background: #00ff88;
+}
+
+
+/* -----------------------------------------
+   NAV
+----------------------------------------- */
+
+html.theme-hacker .nav {
+    border-color:
+        rgba(57,255,20,.20);
+
+    box-shadow:
+        0 0 25px
+        rgba(57,255,20,.08),
+        0 12px 45px
+        rgba(0,0,0,.35);
+}
+
+html.theme-hacker .nav,
+html.theme-hacker .nav a,
+html.theme-hacker .nav button {
+    font-family:
+        "Courier New",
+        monospace;
+}
+
+
+/* -----------------------------------------
+   TEXT
+----------------------------------------- */
+
+html.theme-hacker .gradient-text {
+    background:
+        linear-gradient(
+            90deg,
+            #39ff14,
+            #00ff88,
+            #7cff5b
+        );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    color: transparent;
+}
+
+
+/* -----------------------------------------
+   GLASS
+----------------------------------------- */
+
+html.theme-hacker .glass {
+    border-color:
+        rgba(57,255,20,.14);
+
+    box-shadow:
+        0 0 0 1px
+        rgba(57,255,20,.02),
+
+        0 15px 55px
+        rgba(0,0,0,.3),
+
+        0 0 35px
+        rgba(57,255,20,.05);
+}
+
+
+/* -----------------------------------------
+   PROFILE
+----------------------------------------- */
+
+html.theme-hacker .profile-card {
+    box-shadow:
+        0 20px 75px
+        rgba(0,0,0,.4),
+
+        0 0 45px
+        rgba(57,255,20,.08);
+}
+
+
+/* -----------------------------------------
+   AVATAR
+----------------------------------------- */
+
+html.theme-hacker .avatar-ring {
+    box-shadow:
+        0 0 20px
+        rgba(57,255,20,.55),
+
+        0 0 45px
+        rgba(0,255,136,.16);
+}
+
+
+/* -----------------------------------------
+   BUTTONS
+----------------------------------------- */
+
+html.theme-hacker button:hover,
+html.theme-hacker .btn:hover {
+    border-color:
+        rgba(57,255,20,.45);
+
+    box-shadow:
+        0 0 20px
+        rgba(57,255,20,.15);
+}
+
+
+/* -----------------------------------------
+   SKILLS
+----------------------------------------- */
+
+html.theme-hacker .skill-node {
+    box-shadow:
+        0 0 16px
+        rgba(57,255,20,.10);
+}
+
+html.theme-hacker .skill-node:hover,
+html.theme-hacker .skill-node.active {
+    border-color:
+        rgba(57,255,20,.55);
+
+    box-shadow:
+        0 0 25px
+        rgba(57,255,20,.28),
+
+        0 0 50px
+        rgba(0,255,136,.08);
+}
+
+html.theme-hacker .skill-core {
+    box-shadow:
+        0 0 25px
+        rgba(57,255,20,.18),
+
+        0 0 65px
+        rgba(0,255,136,.07);
+}
+
+
+/* -----------------------------------------
+   MUSIC
+----------------------------------------- */
+
+html.theme-hacker .music-card {
+    box-shadow:
+        0 0 30px
+        rgba(57,255,20,.07);
+}
+
+html.theme-hacker #playlistWave i {
+    background:
+        linear-gradient(
+            to top,
+            #39ff14,
+            #00ff88
+        );
+
+    box-shadow:
+        0 0 7px
+        rgba(57,255,20,.45);
+}
+
+
+/* -----------------------------------------
+   PROJECT
+----------------------------------------- */
+
+html.theme-hacker .project-card:hover {
+    border-color:
+        rgba(57,255,20,.32);
+
+    box-shadow:
+        0 25px 80px
+        rgba(0,0,0,.35),
+
+        0 0 45px
+        rgba(57,255,20,.10);
+}
+
+
+/* -----------------------------------------
+   COLOR WHEEL
+----------------------------------------- */
+
+html.theme-hacker .color-wheel {
+    box-shadow:
+        0 0 25px
+        rgba(57,255,20,.25),
+
+        0 0 50px
+        rgba(0,255,136,.08);
+}
+
+
+/* -----------------------------------------
+   CURSOR
+----------------------------------------- */
+
+html.theme-hacker #cursorRing.state-theme,
+html.theme-hacker #cursorRing.state-map,
+html.theme-hacker #cursorRing.state-view,
+html.theme-hacker #cursorRing.state-skill {
+    border-color:
+        rgba(57,255,20,.9);
+
+    box-shadow:
+        0 0 20px
+        rgba(57,255,20,.45),
+
+        0 0 45px
+        rgba(0,255,136,.12);
+}
+
+
+/* -----------------------------------------
+   MATRIX SCANLINES
+----------------------------------------- */
+
+html.theme-hacker body::after {
+    content: "";
+
+    position: fixed;
+    inset: 0;
+
+    z-index: -1;
+
+    pointer-events: none;
+
+    opacity: .07;
+
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            transparent 0px,
+            transparent 3px,
+            rgba(57,255,20,.14) 4px
+        );
+
+    mix-blend-mode: screen;
+}
+
+
+/* -----------------------------------------
+   HACKER ACTIVE BUTTON
+----------------------------------------- */
+
+html.theme-hacker #themeBtn.active {
+    color: #39ff14;
+
+    text-shadow:
+        0 0 8px
+        rgba(57,255,20,.8),
+
+        0 0 20px
+        rgba(57,255,20,.35);
+}
+
+
+/* -----------------------------------------
+   REDUCE MOTION
+----------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+
+    #matrixRain {
+        display: none;
+    }
+
+
+}
+
+.hacker-layer {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0;
+    overflow: hidden;
+    transition: opacity .5s ease;
+}
+
+.hacker-layer.active {
+    opacity: 1;
+}
+
+
+/* MATRIX */
+
+#matrixRain {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: .72;
+    pointer-events: none;
+}
+
+
+/* nền grid rất nhẹ */
+
+.hacker-grid {
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(57,255,20,.028) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(57,255,20,.028) 1px,
+            transparent 1px
+        );
+
+    background-size: 46px 46px;
+
+    opacity: .35;
+
+    mask-image:
+        radial-gradient(
+            circle,
+            black 20%,
+            transparent 85%
+        );
+}
+
+
+/* scanline */
+
+.hacker-scanline {
+    position: absolute;
+    inset: 0;
+
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            transparent 0,
+            transparent 4px,
+            rgba(57,255,20,.025) 5px
+        );
+
+    opacity: .45;
+
+    animation:
+        hackerScan
+        8s
+        linear
+        infinite;
+}
+
+
+@keyframes hackerScan {
+
+    0% {
+        transform:
+            translateY(-20px);
+    }
+
+    100% {
+        transform:
+            translateY(20px);
+    }
+
+}
+
+
+/* code fragments */
+
+.hacker-code-stream {
+    position: absolute;
+
+    top: 0;
+    bottom: 0;
+
+    width: 15%;
+
+    overflow: hidden;
+
+    opacity: .4;
+}
+
+.hacker-code-left {
+    left: 0;
+}
+
+.hacker-code-right {
+    right: 0;
+}
+
+
+.hacker-code-fragment {
+    position: absolute;
+
+    font-family:
+        "Courier New",
+        monospace;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: .08em;
+
+    color:
+        #39ff14;
+
+    text-shadow:
+        0 0 7px
+        rgba(57,255,20,.45);
+
+    white-space: nowrap;
+}
+
+
+.code-fall {
+    animation:
+        hackerFall
+        linear
+        infinite;
+}
+
+
+.code-rise {
+    animation:
+        hackerRise
+        linear
+        infinite;
+}
+
+
+@keyframes hackerFall {
+
+    from {
+        transform:
+            translateY(-15vh);
+    }
+
+    to {
+        transform:
+            translateY(115vh)
+            translateX(20px);
+    }
+
+}
+
+
+@keyframes hackerRise {
+
+    from {
+        transform:
+            translateY(115vh);
+    }
+
+    to {
+        transform:
+            translateY(-15vh)
+            translateX(-20px);
+    }
+
+}
+
+
+/* Hacker status */
+
+.hacker-status {
+    position: absolute;
+
+    left: 18px;
+    bottom: 16px;
+
+    display: flex;
+    gap: 14px;
+
+    font-family:
+        "Courier New",
+        monospace;
+
+    font-size: 9px;
+
+    letter-spacing: .12em;
+
+    color:
+        rgba(57,255,20,.55);
+
+    text-shadow:
+        0 0 7px
+        rgba(57,255,20,.35);
+}
+
+
+.hacker-terminal-tag {
+    position: absolute;
+
+    right: 18px;
+    bottom: 16px;
+
+    font-family:
+        "Courier New",
+        monospace;
+
+    font-size: 9px;
+
+    color:
+        rgba(57,255,20,.42);
+
+    text-shadow:
+        0 0 7px
+        rgba(57,255,20,.3);
+}
+/* =========================================================
+   HACKER BODY
+========================================================= */
+
+html.theme-hacker body {
+    background:
+        radial-gradient(
+            circle at 50% 35%,
+            rgba(57,255,20,.08),
+            transparent 35%
+        ),
+        #010402;
+}
+
+
+/* =========================================================
+   SPACE
+========================================================= */
+
+html.theme-hacker #space {
+    opacity: .25;
+
+    filter:
+        grayscale(.8)
+        brightness(.45)
+        saturate(.5);
+}
+
+
+/* =========================================================
+   NAV
+========================================================= */
+
+html.theme-hacker .nav {
+    border-color:
+        rgba(57,255,20,.25);
+
+    box-shadow:
+        0 0 25px
+        rgba(57,255,20,.08);
+
+    background:
+        rgba(1,8,3,.78);
+}
+
+
+html.theme-hacker .nav a,
+html.theme-hacker .nav button,
+html.theme-hacker .brand {
+    font-family:
+        "Courier New",
+        monospace;
+}
+
+
+/* =========================================================
+   HEADINGS
+========================================================= */
+
+html.theme-hacker h1,
+html.theme-hacker h2,
+html.theme-hacker h3 {
+    text-shadow:
+        0 0 18px
+        rgba(57,255,20,.08);
+}
+
+
+html.theme-hacker .gradient-text {
+    background:
+        linear-gradient(
+            90deg,
+            #39ff14,
+            #00ff88,
+            #b7ff9a
+        );
+
+    -webkit-background-clip:
+        text;
+
+    background-clip:
+        text;
+
+    color:
+        transparent;
+}
+
+
+/* =========================================================
+   GLASS
+========================================================= */
+
+html.theme-hacker .glass {
+    border-color:
+        rgba(57,255,20,.16);
+
+    background:
+        rgba(2,10,5,.55);
+
+    box-shadow:
+        inset 0 0 25px
+        rgba(57,255,20,.015),
+
+        0 15px 50px
+        rgba(0,0,0,.35);
+}
+
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+html.theme-hacker .profile-card {
+    box-shadow:
+        0 20px 80px
+        rgba(0,0,0,.5),
+
+        0 0 45px
+        rgba(57,255,20,.08);
+}
+
+
+/* =========================================================
+   AVATAR
+========================================================= */
+
+html.theme-hacker .avatar-ring {
+    border-color:
+        rgba(57,255,20,.55);
+
+    box-shadow:
+        0 0 18px
+        rgba(57,255,20,.5),
+
+        0 0 40px
+        rgba(57,255,20,.12);
+}
+
+
+/* =========================================================
+   SKILLS
+========================================================= */
+
+html.theme-hacker .skill-node {
+    font-family:
+        "Courier New",
+        monospace;
+
+    border-color:
+        rgba(57,255,20,.16);
+
+    box-shadow:
+        0 0 12px
+        rgba(57,255,20,.06);
+}
+
+
+html.theme-hacker .skill-node.active,
+html.theme-hacker .skill-node:hover {
+    border-color:
+        rgba(57,255,20,.6);
+
+    color:
+        #39ff14;
+
+    box-shadow:
+        0 0 22px
+        rgba(57,255,20,.25);
+}
+
+
+html.theme-hacker .skill-core {
+    border-color:
+        rgba(57,255,20,.2);
+
+    box-shadow:
+        0 0 30px
+        rgba(57,255,20,.12);
+}
+
+
+/* =========================================================
+   MUSIC
+========================================================= */
+
+html.theme-hacker .music-card {
+    border-color:
+        rgba(57,255,20,.16);
+
+    box-shadow:
+        0 0 28px
+        rgba(57,255,20,.06);
+}
+
+
+html.theme-hacker #playlistWave i {
+    background:
+        linear-gradient(
+            to top,
+            #39ff14,
+            #00ff88,
+            #b7ff9a
+        );
+
+    box-shadow:
+        0 0 8px
+        rgba(57,255,20,.5);
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+html.theme-hacker button:hover,
+html.theme-hacker .btn:hover {
+    border-color:
+        rgba(57,255,20,.45);
+
+    color:
+        #39ff14;
+
+    box-shadow:
+        0 0 22px
+        rgba(57,255,20,.15);
+}
+
+
+/* =========================================================
+   THEME BUTTON
+========================================================= */
+
+html.theme-hacker #themeBtn.active {
+    color:
+        #39ff14;
+
+    text-shadow:
+        0 0 8px
+        rgba(57,255,20,.8),
+
+        0 0 22px
+        rgba(57,255,20,.3);
+}
+
+
+/* =========================================================
+   CURSOR
+========================================================= */
+
+html.theme-hacker #cursorRing {
+    border-color:
+        rgba(57,255,20,.55);
+
+    box-shadow:
+        0 0 15px
+        rgba(57,255,20,.18);
+}
+
+
+html.theme-hacker #cursorLabel {
+    color:
+        #39ff14;
+
+    text-shadow:
+        0 0 8px
+        rgba(57,255,20,.6);
+
+    font-family:
+        "Courier New",
+        monospace;
+}
+
+
+/* =========================================================
+   PROJECT
+========================================================= */
+
+html.theme-hacker .project-card:hover {
+    border-color:
+        rgba(57,255,20,.4);
+
+    box-shadow:
+        0 25px 75px
+        rgba(0,0,0,.45),
+
+        0 0 45px
+        rgba(57,255,20,.10);
+}
+
+
+/* =========================================================
+   WORLD MAP
+========================================================= */
+
+html.theme-hacker .world-map {
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(57,255,20,.08),
+            transparent 45%
+        ),
+        rgba(0,5,2,.93);
+}
+
+
+html.theme-hacker .world-core {
+    border-color:
+        rgba(57,255,20,.35);
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(57,255,20,.13),
+            rgba(0,10,3,.95)
+        );
+
+    box-shadow:
+        0 0 35px
+        rgba(57,255,20,.2);
+}
+
+
+html.theme-hacker .world-node:hover {
+    border-color:
+        rgba(57,255,20,.6);
+
+    color:
+        #39ff14;
+
+    box-shadow:
+        0 0 30px
+        rgba(57,255,20,.25);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .hacker-code-stream {
+        width: 11%;
+        opacity: .3;
+    }
+
+    .hacker-terminal-tag {
+        display: none;
+    }
+
+    .hacker-status {
+        left: 10px;
+        bottom: 10px;
+    }
+
+    #matrixRain {
+        opacity: .6;
+    }
+
+}
+
+/* =========================================================
+   FIX HERO / ABOUT SEPARATOR
+========================================================= */
+
+.hero {
+    position: relative;
+    isolation: isolate;
+}
+
+
+/* Không tạo mảng tối ở đáy Hero */
+
+.hero::after {
+    content: none !important;
+}
+
+
+/* About dùng cùng nền với toàn trang */
+
+#about {
+    position: relative;
+    background: transparent !important;
+}
+
+
+/* Không có đường kẻ ngang giữa 2 section */
+
+#about::before {
+    content: none !important;
+}
+
+
+/* Đảm bảo Hero không bị tạo một band nền */
+
+.hero + #about {
+    border-top: 0 !important;
+    background: transparent !important;
+}
+
+/* =========================================================
+   REMOVE HORIZONTAL BAND IN HERO
+========================================================= */
+
+/* Hero và các lớp bên trong không được tạo background */
+.hero,
+.hero-copy,
+.hero-card-wrap,
+.hero-art,
+.hero + .section {
+    background: transparent !important;
+}
+
+
+/* Tắt toàn bộ pseudo-element có thể tạo dải ngang */
+.hero::before,
+.hero::after,
+.hero-copy::before,
+.hero-copy::after,
+.hero-card-wrap::before,
+.hero-card-wrap::after,
+.hero-art::before,
+.hero-art::after {
+    content: none !important;
+    display: none !important;
+}
+
+
+/* Hero không dùng border ngang */
+.hero {
+    border-bottom: 0 !important;
+    box-shadow: none !important;
+}
+
+
+/* Section phía sau cũng không tạo đường nền */
+#about {
+    background: transparent !important;
+    border-top: 0 !important;
+    box-shadow: none !important;
+}
+
+#about::before,
+#about::after {
+    content: none !important;
+    display: none !important;
+}
+
+
+/* Đảm bảo canvas background phủ đều toàn màn hình */
+#space {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: -4 !important;
+    pointer-events: none !important;
+}
+
+
+/* Không cho main/section tự tạo mảng nền */
+main,
+.section {
+    background: transparent !important;
+}
+
+
+/* Chỉ giữ background chính của body */
+body {
+    background:
+        radial-gradient(
+            circle at 18% 20%,
+            rgba(139,92,246,.10),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 82% 28%,
+            rgba(236,72,153,.08),
+            transparent 28%
+        ),
+        #05030b !important;
+}
+
+
+/* =========================================================
+   NEBULA
+========================================================= */
+
+html.theme-nebula body {
+    background:
+        radial-gradient(
+            circle at 18% 20%,
+            rgba(139,92,246,.16),
+            transparent 32%
+        ),
+        radial-gradient(
+            circle at 82% 25%,
+            rgba(34,211,238,.10),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 50% 85%,
+            rgba(236,72,153,.08),
+            transparent 30%
+        ),
+        #05030b !important;
+}
+
+
+/* =========================================================
+   HACKER
+========================================================= */
+
+html.theme-hacker body {
+    background:
+        radial-gradient(
+            circle at 50% 30%,
+            rgba(57,255,20,.06),
+            transparent 35%
+        ),
+        #010402 !important;
+}
+/* =========================================================
+   SECTION TRACKER — DOTS ONLY
+========================================================= */
+
+.section-tracker {
+    position: fixed;
+
+    right: 22px;
+    top: 50%;
+
+    transform:
+        translateY(-50%);
+
+    z-index: 80;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 11px;
+}
+
+
+.section-dot {
+    position: relative;
+
+    width: 11px;
+    height: 11px;
+
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 0;
+
+    background: transparent;
+
+    cursor: none;
+
+    opacity: .42;
+
+    transition:
+        opacity .25s ease,
+        transform .25s ease;
+}
+
+
+/* Chấm */
+
+.section-dot-point {
+    width: 5px;
+    height: 5px;
+
+    display: block;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,.7);
+
+    box-shadow:
+        0 0 0
+        rgba(139,92,246,0);
+
+    transition:
+        width .3s cubic-bezier(.22,1,.36,1),
+        height .3s cubic-bezier(.22,1,.36,1),
+        background .3s ease,
+        box-shadow .3s ease;
+}
+
+
+/* Hover */
+
+.section-dot:hover {
+    opacity: .9;
+
+    transform:
+        scale(1.15);
+}
+
+
+.section-dot:hover
+.section-dot-point {
+    width: 7px;
+    height: 7px;
+
+    background:
+        var(--purple);
+
+    box-shadow:
+        0 0 12px
+        var(--purple);
+}
+
+
+/* Active */
+
+.section-dot.active {
+    opacity: 1;
+
+    transform:
+        scale(1.05);
+}
+
+
+.section-dot.active
+.section-dot-point {
+    width: 9px;
+    height: 9px;
+
+    background:
+        var(--purple);
+
+    box-shadow:
+        0 0 8px
+        var(--purple),
+
+        0 0 18px
+        rgba(139,92,246,.55);
+}
+
+
+/* Label */
+
+.section-dot strong {
+    position: absolute;
+
+    right: 19px;
+
+    top: 50%;
+
+    transform:
+        translateY(-50%)
+        translateX(6px);
+
+    white-space: nowrap;
+
+    font-size: 8px;
+
+    letter-spacing: .15em;
+
+    font-weight: 700;
+
+    color:
+        rgba(255,255,255,.75);
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition:
+        opacity .2s ease,
+        transform .25s ease;
+}
+
+
+.section-dot:hover strong,
+.section-dot.active strong {
+    opacity: 1;
+
+    transform:
+        translateY(-50%)
+        translateX(0);
+}
+
+
+/* =========================================================
+   TẮT THANH SCROLL PROGRESS CŨ
+========================================================= */
+
+.scroll-progress {
+    display: none !important;
+}
+
+
+/* =========================================================
+   HACKER MODE
+========================================================= */
+
+html.theme-hacker
+.section-dot-point {
+    background:
+        rgba(57,255,20,.65);
+}
+
+
+html.theme-hacker
+.section-dot.active
+.section-dot-point,
+html.theme-hacker
+.section-dot:hover
+.section-dot-point {
+    background:
+        #39ff14;
+
+    box-shadow:
+        0 0 8px
+        #39ff14,
+
+        0 0 18px
+        rgba(57,255,20,.45);
+}
+
+
+html.theme-hacker
+.section-dot strong {
+    color:
+        #39ff14;
+
+    font-family:
+        "Courier New",
+        monospace;
+}
+
+
+/* =========================================================
+   NEBULA
+========================================================= */
+
+html.theme-nebula
+.section-dot.active
+.section-dot-point {
+    background:
+        var(--purple);
+
+    box-shadow:
+        0 0 8px
+        var(--purple),
+
+        0 0 18px
+        rgba(139,92,246,.5);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .section-tracker {
+        right: 8px;
+
+        gap: 9px;
+    }
+
+    .section-dot strong {
+        display: none;
+    }
+
+    .section-dot-point {
+        width: 4px;
+        height: 4px;
+    }
+
+    .section-dot.active
+    .section-dot-point {
+        width: 7px;
+        height: 7px;
+    }
+
+}

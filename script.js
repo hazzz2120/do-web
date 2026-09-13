@@ -12,6 +12,7 @@ const loaderPct = $('#loaderPct');
 let pct = 0;
 
 const boot = setInterval(() => {
+
     pct = Math.min(
         100,
         pct + Math.floor(Math.random() * 12) + 5
@@ -22,20 +23,27 @@ const boot = setInterval(() => {
     }
 
     if (pct >= 100) {
+
         clearInterval(boot);
 
         setTimeout(() => {
+
             if (loader) {
                 loader.style.opacity = '0';
             }
+
         }, 250);
 
         setTimeout(() => {
+
             if (loader) {
                 loader.remove();
             }
+
         }, 800);
+
     }
+
 }, 90);
 
 
@@ -46,6 +54,7 @@ const boot = setInterval(() => {
 const canvas = $('#space');
 
 if (canvas) {
+
     const ctx = canvas.getContext('2d');
 
     let W = 0;
@@ -56,6 +65,7 @@ if (canvas) {
     let particles = [];
 
     function resize() {
+
         dpr = Math.min(
             window.devicePixelRatio || 1,
             2
@@ -109,6 +119,7 @@ if (canvas) {
                 direction: Math.random() > 0.5 ? 1 : -1
             })
         );
+
     }
 
     resize();
@@ -121,6 +132,7 @@ if (canvas) {
     let particleTime = 0;
 
     function draw() {
+
         particleTime += 0.01;
 
         ctx.clearRect(
@@ -130,11 +142,11 @@ if (canvas) {
             H
         );
 
-        /* -----------------------------------------
-           STARS
-        ----------------------------------------- */
+
+        /* STARS */
 
         for (const s of stars) {
+
             s.y -= s.s;
 
             if (s.y < -2) {
@@ -152,7 +164,8 @@ if (canvas) {
                     )
                 );
 
-            ctx.fillStyle = '#d8c7ff';
+            ctx.fillStyle =
+                '#d8c7ff';
 
             ctx.beginPath();
 
@@ -165,13 +178,14 @@ if (canvas) {
             );
 
             ctx.fill();
+
         }
 
-        /* -----------------------------------------
-           FLOATING PARTICLES
-        ----------------------------------------- */
+
+        /* FLOATING PARTICLES */
 
         for (const p of particles) {
+
             p.y +=
                 p.speedY *
                 p.direction;
@@ -180,18 +194,22 @@ if (canvas) {
                 p.direction > 0 &&
                 p.y > H + 10
             ) {
+
                 p.y = -10;
                 p.x = Math.random() * W;
                 p.baseX = p.x;
+
             }
 
             if (
                 p.direction < 0 &&
                 p.y < -10
             ) {
+
                 p.y = H + 10;
                 p.x = Math.random() * W;
                 p.baseX = p.x;
+
             }
 
             const waveX =
@@ -203,6 +221,7 @@ if (canvas) {
             const drawX =
                 p.baseX +
                 waveX;
+
 
             const glow =
                 ctx.createRadialGradient(
@@ -224,8 +243,11 @@ if (canvas) {
                 'rgba(210,190,255,0)'
             );
 
-            ctx.fillStyle = glow;
-            ctx.globalAlpha = 1;
+            ctx.fillStyle =
+                glow;
+
+            ctx.globalAlpha =
+                1;
 
             ctx.beginPath();
 
@@ -239,7 +261,9 @@ if (canvas) {
 
             ctx.fill();
 
-            ctx.fillStyle = '#eadfff';
+
+            ctx.fillStyle =
+                '#eadfff';
 
             ctx.globalAlpha =
                 p.alpha + 0.08;
@@ -255,37 +279,563 @@ if (canvas) {
             );
 
             ctx.fill();
+
         }
 
         ctx.globalAlpha = 1;
 
-        requestAnimationFrame(draw);
+        requestAnimationFrame(
+            draw
+        );
+
     }
 
     draw();
+
 }
+
+
+/* =========================================================
+   HACKER / MATRIX SYSTEM
+========================================================= */
+
+const hackerLayer =
+    document.createElement('div');
+
+hackerLayer.className =
+    'hacker-layer';
+
+hackerLayer.setAttribute(
+    'aria-hidden',
+    'true'
+);
+
+hackerLayer.innerHTML = `
+    <canvas id="matrixRain"></canvas>
+
+    <div class="hacker-grid"></div>
+
+    <div class="hacker-scanline"></div>
+
+    <div class="hacker-code-stream hacker-code-left"></div>
+
+    <div class="hacker-code-stream hacker-code-right"></div>
+
+    <div class="hacker-status">
+        <span>SYS://ONLINE</span>
+        <span id="hackerClock">00:00:00</span>
+    </div>
+
+    <div class="hacker-terminal-tag">
+        root@my.world:~$
+    </div>
+`;
+
+document.body.appendChild(
+    hackerLayer
+);
+
+
+const matrixCanvas =
+    $('#matrixRain');
+
+
+const matrixCtx =
+    matrixCanvas
+        ? matrixCanvas.getContext('2d')
+        : null;
+
+
+let matrixW = 0;
+let matrixH = 0;
+let matrixDpr = 1;
+
+let matrixColumns = [];
+
+let matrixFrame =
+    null;
+
+
+const matrixChars =
+    '01ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+
+function resizeMatrix() {
+
+    if (!matrixCanvas) {
+        return;
+    }
+
+    matrixDpr =
+        Math.min(
+            window.devicePixelRatio || 1,
+            2
+        );
+
+    matrixW =
+        window.innerWidth;
+
+    matrixH =
+        window.innerHeight;
+
+    matrixCanvas.width =
+        matrixW * matrixDpr;
+
+    matrixCanvas.height =
+        matrixH * matrixDpr;
+
+    matrixCanvas.style.width =
+        matrixW + 'px';
+
+    matrixCanvas.style.height =
+        matrixH + 'px';
+
+
+    matrixCtx.setTransform(
+        matrixDpr,
+        0,
+        0,
+        matrixDpr,
+        0,
+        0
+    );
+
+
+    const fontSize =
+        window.innerWidth < 700
+            ? 13
+            : 18;
+
+
+    const count =
+        Math.ceil(
+            matrixW /
+            fontSize
+        );
+
+
+    matrixColumns =
+        Array.from(
+            {
+                length:
+                    count
+            },
+            () => ({
+
+                y:
+                    Math.random() *
+                    matrixH,
+
+                speed:
+                    Math.random() *
+                    2.3 +
+                    0.7,
+
+                length:
+                    Math.floor(
+                        Math.random() *
+                        13
+                    ) + 5,
+
+                alpha:
+                    Math.random() *
+                    0.30 +
+                    0.08,
+
+                size:
+                    fontSize
+
+            })
+        );
+
+}
+
+
+resizeMatrix();
+
+window.addEventListener(
+    'resize',
+    resizeMatrix
+);
+
+
+function drawMatrix() {
+
+    if (!matrixCtx) {
+        return;
+    }
+
+
+    matrixCtx.fillStyle =
+        'rgba(0, 4, 1, .075)';
+
+
+    matrixCtx.fillRect(
+        0,
+        0,
+        matrixW,
+        matrixH
+    );
+
+
+    const now =
+        Date.now();
+
+
+    matrixCtx.font =
+        `${window.innerWidth < 700 ? 13 : 18}px "Courier New", monospace`;
+
+
+    matrixColumns.forEach(
+        (column, index) => {
+
+            column.y +=
+                column.speed;
+
+
+            if (
+                column.y >
+                matrixH +
+                column.length *
+                column.size
+            ) {
+
+                column.y =
+                    -Math.random() *
+                    matrixH *
+                    0.6;
+
+                column.speed =
+                    Math.random() *
+                    2.3 +
+                    0.7;
+
+            }
+
+
+            for (
+                let i = 0;
+                i < column.length;
+                i++
+            ) {
+
+                const y =
+                    column.y -
+                    i *
+                    column.size;
+
+
+                if (
+                    y < -20 ||
+                    y >
+                    matrixH +
+                    20
+                ) {
+
+                    continue;
+
+                }
+
+
+                const fade =
+                    1 -
+                    i /
+                    column.length;
+
+
+                const alpha =
+                    column.alpha *
+                    fade;
+
+
+                let char =
+                    matrixChars[
+                        Math.floor(
+                            Math.random() *
+                            matrixChars.length
+                        )
+                    ];
+
+
+                if (
+                    Math.random() < .025
+                ) {
+
+                    char =
+                        '<';
+
+                }
+
+
+                if (
+                    Math.random() < .02
+                ) {
+
+                    char =
+                        '>';
+
+                }
+
+
+                if (
+                    i === 0
+                ) {
+
+                    matrixCtx.fillStyle =
+                        `rgba(220,255,220,${Math.min(
+                            0.9,
+                            alpha + .3
+                        )})`;
+
+                } else {
+
+                    matrixCtx.fillStyle =
+                        `rgba(57,255,20,${alpha})`;
+
+                }
+
+
+                const drift =
+                    Math.sin(
+                        now / 1200 +
+                        index
+                    ) * 1.3;
+
+
+                matrixCtx.fillText(
+                    char,
+                    index *
+                        column.size +
+                        drift,
+                    y
+                );
+
+            }
+
+        }
+    );
+
+
+    matrixFrame =
+        requestAnimationFrame(
+            drawMatrix
+        );
+
+}
+
+
+drawMatrix();
+
+
+/* =========================================================
+   HACKER CODE STREAMS
+========================================================= */
+
+const codeStreamLeft =
+    $('.hacker-code-left');
+
+const codeStreamRight =
+    $('.hacker-code-right');
+
+
+const codeChars = [
+
+    'C++',
+    'HTML',
+    'CSS',
+    'JS',
+    'AI',
+    '{}',
+    '</>',
+    '&&',
+    '||',
+    'null',
+    'true',
+    'false',
+    'sudo',
+    'root',
+    'git',
+    'npm',
+    'build',
+    'compile',
+    'system',
+    'online',
+    'MY.WORLD',
+    'localhost',
+    '0x01',
+    '0xFF',
+    '010101'
+
+];
+
+
+function createCodeFragment(
+    side
+) {
+
+    const item =
+        document.createElement(
+            'div'
+        );
+
+
+    item.className =
+        'hacker-code-fragment';
+
+
+    item.textContent =
+        codeChars[
+            Math.floor(
+                Math.random() *
+                codeChars.length
+            )
+        ];
+
+
+    item.style.left =
+        (
+            Math.random() *
+            85
+        ) + '%';
+
+
+    item.style.animationDuration =
+        (
+            Math.random() * 7 +
+            5
+        ) + 's';
+
+
+    item.style.animationDelay =
+        (
+            Math.random() * -8
+        ) + 's';
+
+
+    item.style.opacity =
+        (
+            Math.random() *
+            .45 +
+            .10
+        );
+
+
+    item.classList.add(
+        side === 'left'
+            ? 'code-fall'
+            : 'code-rise'
+    );
+
+
+    return item;
+
+}
+
+
+if (
+    codeStreamLeft &&
+    codeStreamRight
+) {
+
+    for (
+        let i = 0;
+        i < 9;
+        i++
+    ) {
+
+        codeStreamLeft.appendChild(
+            createCodeFragment(
+                'left'
+            )
+        );
+
+
+        codeStreamRight.appendChild(
+            createCodeFragment(
+                'right'
+            )
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   HACKER CLOCK
+========================================================= */
+
+const hackerClock =
+    $('#hackerClock');
+
+
+function updateHackerClock() {
+
+    if (!hackerClock) {
+        return;
+    }
+
+    const now =
+        new Date();
+
+
+    hackerClock.textContent =
+        [
+            now.getHours(),
+            now.getMinutes(),
+            now.getSeconds()
+        ]
+            .map(
+                (n) =>
+                    String(n)
+                        .padStart(
+                            2,
+                            '0'
+                        )
+            )
+            .join(':');
+
+}
+
+
+updateHackerClock();
+
+
+setInterval(
+    updateHackerClock,
+    1000
+);
 
 
 /* =========================================================
    CUSTOM CURSOR — STATE SYSTEM
 ========================================================= */
 
-let mx = window.innerWidth / 2;
-let my = window.innerHeight / 2;
+let mx =
+    window.innerWidth / 2;
 
-let rx = mx;
-let ry = my;
+let my =
+    window.innerHeight / 2;
 
-const dot = $('#cursorDot');
-const ring = $('#cursorRing');
-const label = $('#cursorLabel');
+let rx =
+    mx;
+
+let ry =
+    my;
 
 
-/*
-   Các trạng thái cursor
-*/
+const dot =
+    $('#cursorDot');
+
+const ring =
+    $('#cursorRing');
+
+const label =
+    $('#cursorLabel');
+
 
 const cursorStates = {
+
     default: {
         text: '',
         size: 38,
@@ -341,8 +891,8 @@ const cursorStates = {
     },
 
     sound: {
-        text: 'SOUND',
-        size: 60,
+        text: 'RANDOM',
+        size: 64,
         className: 'state-sound'
     },
 
@@ -356,36 +906,57 @@ const cursorStates = {
         text: 'SOCIAL',
         size: 64,
         className: 'state-social'
+    },
+
+    map: {
+        text: 'MAP',
+        size: 56,
+        className: 'state-map'
     }
+
 };
 
 
-function setCursorState(stateName = 'default') {
+function setCursorState(
+    stateName = 'default'
+) {
+
     const state =
         cursorStates[stateName] ||
         cursorStates.default;
 
+
     if (ring) {
-        Object.values(cursorStates).forEach(
+
+        Object.values(
+            cursorStates
+        ).forEach(
             (item) => {
+
                 ring.classList.remove(
                     item.className
                 );
+
             }
         );
+
 
         ring.classList.add(
             state.className
         );
+
 
         ring.style.width =
             state.size + 'px';
 
         ring.style.height =
             state.size + 'px';
+
     }
 
+
     if (label) {
+
         label.textContent =
             state.text;
 
@@ -393,36 +964,50 @@ function setCursorState(stateName = 'default') {
             state.text
                 ? '1'
                 : '0';
+
     }
+
 }
 
 
 window.addEventListener(
     'mousemove',
     (e) => {
-        mx = e.clientX;
-        my = e.clientY;
+
+        mx =
+            e.clientX;
+
+        my =
+            e.clientY;
+
 
         if (dot) {
+
             dot.style.left =
                 mx + 'px';
 
             dot.style.top =
                 my + 'px';
+
         }
 
+
         if (label) {
+
             label.style.left =
                 mx + 'px';
 
             label.style.top =
                 my + 'px';
+
         }
+
     }
 );
 
 
 function cursorLoop() {
+
     rx +=
         (mx - rx) *
         0.18;
@@ -431,27 +1016,40 @@ function cursorLoop() {
         (my - ry) *
         0.18;
 
+
     if (ring) {
+
         ring.style.left =
             rx + 'px';
 
         ring.style.top =
             ry + 'px';
+
     }
+
 
     requestAnimationFrame(
         cursorLoop
     );
+
 }
+
 
 cursorLoop();
 
 
-/*
-   Xác định state dựa vào element
-*/
+function getCursorState(
+    element
+) {
 
-function getCursorState(element) {
+    if (
+        element.matches(
+            '#worldMapBtn'
+        )
+    ) {
+        return 'map';
+    }
+
 
     if (
         element.matches(
@@ -461,6 +1059,7 @@ function getCursorState(element) {
         return 'play';
     }
 
+
     if (
         element.matches(
             '#playlistNext'
@@ -468,6 +1067,7 @@ function getCursorState(element) {
     ) {
         return 'next';
     }
+
 
     if (
         element.matches(
@@ -477,6 +1077,7 @@ function getCursorState(element) {
         return 'prev';
     }
 
+
     if (
         element.matches(
             '#colorWheel'
@@ -484,6 +1085,7 @@ function getCursorState(element) {
     ) {
         return 'color';
     }
+
 
     if (
         element.matches(
@@ -493,6 +1095,7 @@ function getCursorState(element) {
         return 'theme';
     }
 
+
     if (
         element.matches(
             '#soundBtn'
@@ -500,6 +1103,7 @@ function getCursorState(element) {
     ) {
         return 'sound';
     }
+
 
     if (
         element.matches(
@@ -509,6 +1113,7 @@ function getCursorState(element) {
         return 'copy';
     }
 
+
     if (
         element.matches(
             '.skill-node'
@@ -516,6 +1121,7 @@ function getCursorState(element) {
     ) {
         return 'skill';
     }
+
 
     if (
         element.matches(
@@ -525,6 +1131,7 @@ function getCursorState(element) {
         return 'view';
     }
 
+
     if (
         element.matches(
             '.social-card'
@@ -532,6 +1139,7 @@ function getCursorState(element) {
     ) {
         return 'social';
     }
+
 
     if (
         element.matches(
@@ -541,6 +1149,7 @@ function getCursorState(element) {
         return 'view';
     }
 
+
     if (
         element.matches(
             'a'
@@ -548,6 +1157,7 @@ function getCursorState(element) {
     ) {
         return 'open';
     }
+
 
     if (
         element.matches(
@@ -557,13 +1167,11 @@ function getCursorState(element) {
         return 'open';
     }
 
+
     return 'default';
+
 }
 
-
-/*
-   Hover state
-*/
 
 $$(
     'a, button, .tilt, .social-card, .skill-node, .project-card, .copy-btn, #colorWheel'
@@ -581,6 +1189,7 @@ $$(
             }
         );
 
+
         el.addEventListener(
             'mouseleave',
             () => {
@@ -591,11 +1200,642 @@ $$(
 
             }
         );
+
     }
 );
 
 
-setCursorState('default');
+setCursorState(
+    'default'
+);
+
+
+/* =========================================================
+   WORLD MAP
+========================================================= */
+
+const worldMapBtn =
+    $('#worldMapBtn');
+
+
+const worldMap =
+    document.createElement(
+        'div'
+    );
+
+
+worldMap.className =
+    'world-map';
+
+
+worldMap.innerHTML = `
+
+    <div class="world-map-inner">
+
+        <div class="world-map-grid"></div>
+
+        <div class="world-map-header">
+
+            <div class="world-map-title">
+
+                <strong>
+                    MY.WORLD MAP
+                </strong>
+
+                <span>
+                    Explore my universe
+                </span>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="world-map-close"
+                id="worldMapClose"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="world-universe">
+
+            <div
+                class="world-orbit world-orbit-1"
+            ></div>
+
+            <div
+                class="world-orbit world-orbit-2"
+            ></div>
+
+
+            <div
+                class="world-line world-line-1"
+            ></div>
+
+            <div
+                class="world-line world-line-2"
+            ></div>
+
+            <div
+                class="world-line world-line-3"
+            ></div>
+
+            <div
+                class="world-line world-line-4"
+            ></div>
+
+
+            <div class="world-core">
+
+                <strong>
+                    MY.WORLD
+                </strong>
+
+                <span>
+                    PERSONAL UNIVERSE
+                </span>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="world-node world-node-home"
+                data-world-target="home"
+            >
+                <span>HOME</span>
+                <small>origin</small>
+            </button>
+
+
+            <button
+                type="button"
+                class="world-node world-node-about"
+                data-world-target="about"
+            >
+                <span>ABOUT</span>
+                <small>my story</small>
+            </button>
+
+
+            <button
+                type="button"
+                class="world-node world-node-skills"
+                data-world-target="skills"
+            >
+                <span>SKILLS</span>
+                <small>abilities</small>
+            </button>
+
+
+            <button
+                type="button"
+                class="world-node world-node-projects"
+                data-world-target="projects"
+            >
+                <span>PROJECTS</span>
+                <small>my work</small>
+            </button>
+
+
+            <button
+                type="button"
+                class="world-node world-node-links"
+                data-world-target="links"
+            >
+                <span>LINKS</span>
+                <small>social</small>
+            </button>
+
+
+            <button
+                type="button"
+                class="world-node world-node-contact"
+                data-world-target="contact"
+            >
+                <span>CONTACT</span>
+                <small>connect</small>
+            </button>
+
+        </div>
+
+
+        <div class="world-map-hint">
+            SELECT A PLANET TO EXPLORE
+        </div>
+
+    </div>
+
+`;
+
+
+document.body.appendChild(
+    worldMap
+);
+
+
+const worldMapClose =
+    $('#worldMapClose');
+
+
+function openWorldMap() {
+
+    worldMap.classList.add(
+        'open'
+    );
+
+
+    document.documentElement.classList.add(
+        'world-map-open'
+    );
+
+
+    if (worldMapBtn) {
+
+        worldMapBtn.classList.add(
+            'active'
+        );
+
+    }
+
+
+    setCursorState(
+        'default'
+    );
+
+}
+
+
+function closeWorldMap() {
+
+    worldMap.classList.remove(
+        'open'
+    );
+
+
+    document.documentElement.classList.remove(
+        'world-map-open'
+    );
+
+
+    if (worldMapBtn) {
+
+        worldMapBtn.classList.remove(
+            'active'
+        );
+
+    }
+
+
+    setCursorState(
+        'default'
+    );
+
+}
+
+
+if (worldMapBtn) {
+
+    worldMapBtn.addEventListener(
+        'click',
+        openWorldMap
+    );
+
+}
+
+
+if (worldMapClose) {
+
+    worldMapClose.addEventListener(
+        'click',
+        closeWorldMap
+    );
+
+}
+
+
+worldMap.addEventListener(
+    'click',
+    (event) => {
+
+        if (
+            event.target ===
+            worldMap
+        ) {
+
+            closeWorldMap();
+
+        }
+
+    }
+);
+
+
+$$(
+    '[data-world-target]'
+).forEach(
+    (node) => {
+
+        node.addEventListener(
+            'mouseenter',
+            () => {
+
+                if (ring) {
+
+                    ring.classList.add(
+                        'state-map'
+                    );
+
+                    ring.style.width =
+                        '60px';
+
+                    ring.style.height =
+                        '60px';
+
+                }
+
+
+                if (label) {
+
+                    label.textContent =
+                        node
+                            .querySelector(
+                                'span'
+                            )
+                            ?.textContent ||
+                        'GO';
+
+                    label.style.opacity =
+                        '1';
+
+                }
+
+            }
+        );
+
+
+        node.addEventListener(
+            'mouseleave',
+            () => {
+
+                setCursorState(
+                    'default'
+                );
+
+            }
+        );
+
+
+        node.addEventListener(
+            'click',
+            () => {
+
+                const targetId =
+                    node.dataset.worldTarget;
+
+
+                const target =
+                    document.getElementById(
+                        targetId
+                    );
+
+
+                closeWorldMap();
+
+
+                if (target) {
+
+                    setTimeout(
+                        () => {
+
+                            target.scrollIntoView(
+                                {
+                                    behavior:
+                                        'smooth',
+
+                                    block:
+                                        'start'
+                                }
+                            );
+
+                        },
+                        250
+                    );
+
+                }
+
+            }
+        );
+
+    }
+);
+
+
+window.addEventListener(
+    'keydown',
+    (event) => {
+
+        if (
+            event.key === 'Escape' &&
+            worldMap.classList.contains(
+                'open'
+            )
+        ) {
+
+            closeWorldMap();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   SECTION TRACKER — DOTS ONLY
+========================================================= */
+
+const sectionData = [
+    {
+        id: 'home',
+        label: 'HOME'
+    },
+    {
+        id: 'about',
+        label: 'ABOUT'
+    },
+    {
+        id: 'skills',
+        label: 'SKILLS'
+    },
+    {
+        id: 'projects',
+        label: 'PROJECTS'
+    },
+    {
+        id: 'links',
+        label: 'LINKS'
+    },
+    {
+        id: 'contact',
+        label: 'CONTACT'
+    }
+];
+
+
+const sectionTracker =
+    document.createElement(
+        'div'
+    );
+
+
+sectionTracker.className =
+    'section-tracker';
+
+
+sectionTracker.setAttribute(
+    'aria-label',
+    'Section navigation'
+);
+
+
+sectionTracker.innerHTML =
+    sectionData
+        .map(
+            (section, index) => `
+                <button
+                    type="button"
+                    class="section-dot ${index === 0 ? 'active' : ''}"
+                    data-section-target="${section.id}"
+                    aria-label="${section.label}"
+                    title="${section.label}"
+                >
+                    <span class="section-dot-point"></span>
+                    <strong>${section.label}</strong>
+                </button>
+            `
+        )
+        .join('');
+
+
+document.body.appendChild(
+    sectionTracker
+);
+
+
+const sectionDots =
+    $$('.section-dot');
+
+
+const trackedSections =
+    sectionData
+        .map(
+            (item) =>
+                document.getElementById(
+                    item.id
+                )
+        )
+        .filter(Boolean);
+
+
+function setActiveSection(
+    id
+) {
+
+    sectionDots.forEach(
+        (dot) => {
+
+            dot.classList.toggle(
+                'active',
+                dot.dataset.sectionTarget === id
+            );
+
+        }
+    );
+
+}
+
+
+sectionDots.forEach(
+    (dot) => {
+
+        dot.addEventListener(
+            'mouseenter',
+            () => {
+
+                if (label) {
+
+                    label.textContent =
+                        dot
+                            .dataset
+                            .sectionTarget
+                            ?.toUpperCase() ||
+                        '';
+
+                    label.style.opacity =
+                        '1';
+
+                }
+
+
+                if (ring) {
+
+                    ring.style.width =
+                        '54px';
+
+                    ring.style.height =
+                        '54px';
+
+                }
+
+            }
+        );
+
+
+        dot.addEventListener(
+            'mouseleave',
+            () => {
+
+                setCursorState(
+                    'default'
+                );
+
+            }
+        );
+
+
+        dot.addEventListener(
+            'click',
+            () => {
+
+                const target =
+                    document.getElementById(
+                        dot.dataset.sectionTarget
+                    );
+
+
+                if (!target) {
+                    return;
+                }
+
+
+                target.scrollIntoView(
+                    {
+                        behavior:
+                            'smooth',
+
+                        block:
+                            'start'
+                    }
+                );
+
+
+                setActiveSection(
+                    dot.dataset.sectionTarget
+                );
+
+            }
+        );
+
+    }
+);
+
+
+/*
+   Xác định section hiện tại
+*/
+
+const sectionObserver =
+    new IntersectionObserver(
+        (entries) => {
+
+            const visible =
+                entries
+                    .filter(
+                        (entry) =>
+                            entry.isIntersecting
+                    )
+                    .sort(
+                        (a, b) =>
+                            b.intersectionRatio -
+                            a.intersectionRatio
+                    )[0];
+
+
+            if (visible) {
+
+                setActiveSection(
+                    visible.target.id
+                );
+
+            }
+
+        },
+        {
+            threshold: [
+                0.15,
+                0.35,
+                0.55,
+                0.75
+            ],
+
+            rootMargin:
+                '-15% 0px -35% 0px'
+        }
+    );
+
+
+trackedSections.forEach(
+    (section) => {
+
+        sectionObserver.observe(
+            section
+        );
+
+    }
+);
 
 
 /* =========================================================
@@ -605,8 +1845,10 @@ setCursorState('default');
 const revealElements =
     $$('.reveal');
 
+
 let lastScrollY =
     window.scrollY;
+
 
 let scrollDirection =
     'down';
@@ -619,21 +1861,25 @@ window.addEventListener(
         const currentY =
             window.scrollY;
 
+
         if (
             currentY >
             lastScrollY
         ) {
+
             scrollDirection =
                 'down';
-        }
 
-        if (
+        } else if (
             currentY <
             lastScrollY
         ) {
+
             scrollDirection =
                 'up';
+
         }
+
 
         lastScrollY =
             currentY;
@@ -678,6 +1924,7 @@ const revealObserver =
                     const el =
                         entry.target;
 
+
                     if (
                         entry.isIntersecting
                     ) {
@@ -686,6 +1933,7 @@ const revealObserver =
                             'reveal-from-top',
                             'reveal-from-bottom'
                         );
+
 
                         if (
                             scrollDirection ===
@@ -703,6 +1951,7 @@ const revealObserver =
                             );
 
                         }
+
 
                         requestAnimationFrame(
                             () => {
@@ -727,11 +1976,15 @@ const revealObserver =
                         );
 
                     }
+
                 }
             );
+
         },
         {
-            threshold: 0.08,
+            threshold:
+                0.08,
+
             rootMargin:
                 '-4% 0px -8% 0px'
         }
@@ -753,40 +2006,26 @@ revealElements.forEach(
    SCROLL PROGRESS
 ========================================================= */
 
+/*
+   Không dùng thanh bar cũ nữa.
+   Section Tracker bên trên đã thay thế.
+*/
+
 window.addEventListener(
     'scroll',
     () => {
 
-        const progress =
-            $('#progress');
-
         const topbar =
             $('#topbar');
 
-        const h =
-            document.documentElement
-                .scrollHeight -
-            window.innerHeight;
-
-        if (
-            progress &&
-            h > 0
-        ) {
-
-            progress.style.height =
-                (
-                    window.scrollY /
-                    h *
-                    100
-                ) + '%';
-
-        }
 
         if (topbar) {
 
             topbar.style.boxShadow =
                 window.scrollY > 40
+
                     ? '0 16px 55px rgba(0,0,0,.34)'
+
                     : 'inset 0 1px 0 rgba(255,255,255,.08),var(--shadow)';
 
         }
@@ -809,6 +2048,7 @@ $$('.tilt').forEach(
                 const r =
                     card.getBoundingClientRect();
 
+
                 const x =
                     (
                         e.clientX -
@@ -817,6 +2057,7 @@ $$('.tilt').forEach(
                     r.width -
                     0.5;
 
+
                 const y =
                     (
                         e.clientY -
@@ -824,6 +2065,7 @@ $$('.tilt').forEach(
                     ) /
                     r.height -
                     0.5;
+
 
                 card.style.transform = `
                     perspective(900px)
@@ -835,10 +2077,14 @@ $$('.tilt').forEach(
             }
         );
 
+
         card.addEventListener(
             'mouseleave',
             () => {
-                card.style.transform = '';
+
+                card.style.transform =
+                    '';
+
             }
         );
 
@@ -860,6 +2106,7 @@ $$('.magnetic').forEach(
                 const r =
                     el.getBoundingClientRect();
 
+
                 const x =
                     (
                         e.clientX -
@@ -869,6 +2116,7 @@ $$('.magnetic').forEach(
                         )
                     ) *
                     0.08;
+
 
                 const y =
                     (
@@ -880,16 +2128,21 @@ $$('.magnetic').forEach(
                     ) *
                     0.08;
 
+
                 el.style.transform =
                     `translate(${x}px, ${y}px)`;
 
             }
         );
 
+
         el.addEventListener(
             'mouseleave',
             () => {
-                el.style.transform = '';
+
+                el.style.transform =
+                    '';
+
             }
         );
 
@@ -898,7 +2151,7 @@ $$('.magnetic').forEach(
 
 
 /* =========================================================
-   SKILLS
+   SKILLS — GIỮ NGUYÊN
 ========================================================= */
 
 const skills = {
@@ -942,9 +2195,12 @@ $$('.skill-node').forEach(
         node.addEventListener(
             'pointerdown',
             (event) => {
+
                 event.stopPropagation();
+
             }
         );
+
 
         node.addEventListener(
             'click',
@@ -953,14 +2209,17 @@ $$('.skill-node').forEach(
                 event.preventDefault();
                 event.stopPropagation();
 
+
                 const skill =
                     skills[
                         node.dataset.skill
                     ];
 
+
                 if (!skill) {
                     return;
                 }
+
 
                 $$('.skill-node')
                     .forEach(
@@ -973,40 +2232,57 @@ $$('.skill-node').forEach(
                         }
                     );
 
+
                 node.classList.add(
                     'active'
                 );
 
+
                 const title =
                     $('#skillTitle');
+
 
                 const text =
                     $('#skillText');
 
+
                 const percent =
                     $('#skillPercent');
+
 
                 const bar =
                     $('#skillBar');
 
+
                 if (title) {
+
                     title.textContent =
                         skill[0];
+
                 }
+
 
                 if (text) {
+
                     text.textContent =
                         skill[1];
+
                 }
+
 
                 if (percent) {
+
                     percent.textContent =
                         skill[2];
+
                 }
 
+
                 if (bar) {
+
                     bar.style.width =
                         skill[2];
+
                 }
 
             }
@@ -1034,14 +2310,17 @@ $$('.copy-btn').forEach(
                             btn.dataset.copy
                         );
 
+
                     const toast =
                         $('#toast');
+
 
                     if (toast) {
 
                         toast.classList.add(
                             'show'
                         );
+
 
                         setTimeout(
                             () => {
@@ -1079,23 +2358,30 @@ $$('.copy-btn').forEach(
 const playBtn =
     $('#playlistPlay');
 
+
 const prevBtn =
     $('#playlistPrev');
+
 
 const nextBtn =
     $('#playlistNext');
 
+
 const audioPlayer =
     $('#playlistAudio');
+
 
 const musicTitle =
     $('#playlistTitle');
 
+
 const musicArtist =
     $('#playlistArtist');
 
+
 const musicCount =
     $('#playlistCount');
+
 
 const waveBars =
     $$('#playlistWave i');
@@ -1122,7 +2408,7 @@ const playlist = [
     {
         title: 'Túy ÂM',
         artist: 'Masew',
-        src: 'music/tuyam.mp3'
+        src: 'music/TN.mp3'
     },
 
     {
@@ -1133,31 +2419,41 @@ const playlist = [
 
 ];
 
+
 let currentSong = 0;
+
+let visualizerFrame =
+    null;
+
+let visualizerTime =
+    0;
 
 
 /* =========================================================
-   VISUALIZER
+   MUSIC VISUALIZER
 ========================================================= */
-
-let visualizerFrame = null;
-let visualizerTime = 0;
-
 
 function animateVisualizer() {
 
-    if (!audioPlayer || audioPlayer.paused) {
+    if (
+        !audioPlayer ||
+        audioPlayer.paused
+    ) {
+
         cancelAnimationFrame(
             visualizerFrame
         );
 
-        visualizerFrame = null;
+        visualizerFrame =
+            null;
 
         return;
+
     }
 
 
-    visualizerTime += 0.14;
+    visualizerTime +=
+        0.14;
 
 
     waveBars.forEach(
@@ -1169,29 +2465,35 @@ function animateVisualizer() {
                     index * 0.65
                 );
 
+
             const wave2 =
                 Math.sin(
                     visualizerTime * 1.7 +
                     index * 0.45
                 );
 
+
             const height =
                 5 +
                 (
-                    (wave + 1) / 2
+                    (wave + 1) /
+                    2
                 ) * 15 +
                 (
-                    (wave2 + 1) / 2
+                    (wave2 + 1) /
+                    2
                 ) * 8;
 
 
             bar.style.height =
                 `${height}px`;
 
+
             bar.style.opacity =
                 0.55 +
                 (
-                    (wave + 1) / 2
+                    (wave + 1) /
+                    2
                 ) * 0.45;
 
         }
@@ -1202,20 +2504,27 @@ function animateVisualizer() {
         requestAnimationFrame(
             animateVisualizer
         );
+
 }
 
 
 function startVisualizer() {
 
     if (visualizerFrame) {
+
         cancelAnimationFrame(
             visualizerFrame
         );
+
     }
 
-    visualizerTime = 0;
+
+    visualizerTime =
+        0;
+
 
     animateVisualizer();
+
 }
 
 
@@ -1227,7 +2536,9 @@ function stopVisualizer() {
             visualizerFrame
         );
 
-        visualizerFrame = null;
+        visualizerFrame =
+            null;
+
     }
 
 
@@ -1246,10 +2557,6 @@ function stopVisualizer() {
 }
 
 
-/* =========================================================
-   PLAY / PAUSE UI
-========================================================= */
-
 function setPlayingUI() {
 
     if (playBtn) {
@@ -1260,9 +2567,12 @@ function setPlayingUI() {
         playBtn.classList.add(
             'playing'
         );
+
     }
 
+
     startVisualizer();
+
 }
 
 
@@ -1276,15 +2586,14 @@ function setPausedUI() {
         playBtn.classList.remove(
             'playing'
         );
+
     }
 
+
     stopVisualizer();
+
 }
 
-
-/* =========================================================
-   LOAD SONG
-========================================================= */
 
 function loadSong(
     index,
@@ -1379,10 +2688,6 @@ function loadSong(
 }
 
 
-/* =========================================================
-   PLAY BUTTON
-========================================================= */
-
 if (
     playBtn &&
     audioPlayer
@@ -1428,10 +2733,6 @@ if (
 }
 
 
-/* =========================================================
-   NEXT
-========================================================= */
-
 if (
     nextBtn &&
     audioPlayer
@@ -1452,10 +2753,6 @@ if (
 }
 
 
-/* =========================================================
-   PREVIOUS
-========================================================= */
-
 if (
     prevBtn &&
     audioPlayer
@@ -1475,10 +2772,6 @@ if (
 
 }
 
-
-/* =========================================================
-   AUDIO EVENTS
-========================================================= */
 
 if (audioPlayer) {
 
@@ -1517,11 +2810,96 @@ if (audioPlayer) {
 }
 
 
+loadSong(0);
+
+
 /* =========================================================
-   INITIAL SONG
+   RANDOM MUSIC — ◒
 ========================================================= */
 
-loadSong(0);
+const soundBtn =
+    $('#soundBtn');
+
+
+if (
+    soundBtn &&
+    audioPlayer &&
+    playlist.length
+) {
+
+    soundBtn.addEventListener(
+        'click',
+        () => {
+
+            let randomSong;
+
+
+            do {
+
+                randomSong =
+                    Math.floor(
+                        Math.random() *
+                        playlist.length
+                    );
+
+            } while (
+                playlist.length > 1 &&
+                randomSong === currentSong
+            );
+
+
+            loadSong(
+                randomSong,
+                true
+            );
+
+
+            soundBtn.classList.add(
+                'active'
+            );
+
+
+            const toast =
+                $('#toast');
+
+
+            if (toast) {
+
+                const song =
+                    playlist[randomSong];
+
+
+                toast.textContent =
+                    `▶ ${song.title}`;
+
+
+                toast.classList.add(
+                    'show'
+                );
+
+
+                setTimeout(
+                    () => {
+
+                        toast.classList.remove(
+                            'show'
+                        );
+
+
+                        toast.textContent =
+                            'Copied ✓';
+
+                    },
+                    1400
+                );
+
+            }
+
+        }
+    );
+
+}
+
 
 /* =========================================================
    COLOR WHEEL
@@ -1541,29 +2919,36 @@ function applyThemeColor(
             360
         ) % 360;
 
+
     const purple =
         `hsl(${normalizedHue} 75% 65%)`;
+
 
     const pink =
         `hsl(${(normalizedHue + 35) % 360} 80% 75%)`;
 
+
     const cyan =
         `hsl(${(normalizedHue + 70) % 360} 85% 70%)`;
+
 
     document.documentElement.style.setProperty(
         '--purple',
         purple
     );
 
+
     document.documentElement.style.setProperty(
         '--pink',
         pink
     );
 
+
     document.documentElement.style.setProperty(
         '--cyan',
         cyan
     );
+
 
     document.documentElement.style.setProperty(
         '--theme-hue',
@@ -1582,21 +2967,26 @@ if (colorWheel) {
             const rect =
                 colorWheel.getBoundingClientRect();
 
+
             const centerX =
                 rect.left +
                 rect.width / 2;
+
 
             const centerY =
                 rect.top +
                 rect.height / 2;
 
+
             const x =
                 event.clientX -
                 centerX;
 
+
             const y =
                 event.clientY -
                 centerY;
+
 
             let angle =
                 Math.atan2(
@@ -1606,11 +2996,18 @@ if (colorWheel) {
                 180 /
                 Math.PI;
 
-            angle += 90;
+
+            angle +=
+                90;
+
 
             if (angle < 0) {
-                angle += 360;
+
+                angle +=
+                    360;
+
             }
+
 
             applyThemeColor(
                 angle
@@ -1630,24 +3027,30 @@ if (colorWheel) {
                 return;
             }
 
+
             const rect =
                 colorWheel.getBoundingClientRect();
+
 
             const centerX =
                 rect.left +
                 rect.width / 2;
 
+
             const centerY =
                 rect.top +
                 rect.height / 2;
+
 
             const x =
                 event.clientX -
                 centerX;
 
+
             const y =
                 event.clientY -
                 centerY;
+
 
             let angle =
                 Math.atan2(
@@ -1657,11 +3060,18 @@ if (colorWheel) {
                 180 /
                 Math.PI;
 
-            angle += 90;
+
+            angle +=
+                90;
+
 
             if (angle < 0) {
-                angle += 360;
+
+                angle +=
+                    360;
+
             }
+
 
             applyThemeColor(
                 angle
@@ -1674,30 +3084,76 @@ if (colorWheel) {
 
 
 /* =========================================================
-   THEME 2 — NEBULA / AURORA
+   THEME SYSTEM
+   ORIGINAL → NEBULA → HACKER → ORIGINAL
 ========================================================= */
 
-let alt = false;
+let themeMode = 0;
 
 const themeBtn =
     $('#themeBtn');
 
 
-function setTheme2(
-    enabled
+function setThemeMode(
+    mode
 ) {
 
-    document.documentElement
-        .classList.toggle(
-            'theme-nebula',
-            enabled
+    themeMode =
+        (
+            mode + 3
+        ) % 3;
+
+
+    document.documentElement.classList.remove(
+        'theme-nebula',
+        'theme-hacker'
+    );
+
+
+    if (
+        themeMode === 1
+    ) {
+
+        document.documentElement.classList.add(
+            'theme-nebula'
         );
+
+    }
+
+
+    if (
+        themeMode === 2
+    ) {
+
+        document.documentElement.classList.add(
+            'theme-hacker'
+        );
+
+    }
+
 
     if (themeBtn) {
 
         themeBtn.classList.toggle(
             'active',
-            enabled
+            themeMode !== 0
+        );
+
+    }
+
+
+    if (
+        themeMode === 2
+    ) {
+
+        hackerLayer.classList.add(
+            'active'
+        );
+
+    } else {
+
+        hackerLayer.classList.remove(
+            'active'
         );
 
     }
@@ -1711,144 +3167,73 @@ if (themeBtn) {
         'click',
         () => {
 
-            alt = !alt;
-
-            setTheme2(
-                alt
+            setThemeMode(
+                themeMode + 1
             );
+
 
             const toast =
                 $('#toast');
 
-            if (toast) {
 
-                toast.textContent =
-                    alt
-                        ? 'Nebula theme ✦'
-                        : 'Original theme';
+            if (!toast) {
+                return;
+            }
 
-                toast.classList.add(
-                    'show'
-                );
 
-                setTimeout(
-                    () => {
+            let message =
+                'Original theme';
 
-                        toast.classList.remove(
-                            'show'
-                        );
 
-                        toast.textContent =
-                            '';
+            if (
+                themeMode === 1
+            ) {
 
-                    },
-                    1200
-                );
+                message =
+                    'Nebula theme ✦';
 
             }
 
-        }
-    );
 
-}
+            if (
+                themeMode === 2
+            ) {
+
+                message =
+                    'HACKER MODE // SYSTEM ONLINE';
+
+            }
 
 
-/* =========================================================
-   RANDOM MUSIC BUTTON — ◒
-========================================================= */
+            toast.textContent =
+                message;
 
-const soundBtn =
-    $('#soundBtn');
 
-if (
-    soundBtn &&
-    audioPlayer &&
-    playlist.length
-) {
+            toast.classList.add(
+                'show'
+            );
 
-    soundBtn.addEventListener(
-        'click',
-        () => {
 
-            /*
-               Chọn ngẫu nhiên một bài
-               trong playlist
-            */
+            setTimeout(
+                () => {
 
-            let randomSong;
-
-            do {
-
-                randomSong =
-                    Math.floor(
-                        Math.random() *
-                        playlist.length
+                    toast.classList.remove(
+                        'show'
                     );
 
-            } while (
-                playlist.length > 1 &&
-                randomSong === currentSong
+
+                    toast.textContent =
+                        'Copied ✓';
+
+                },
+                1400
             );
-
-
-            /*
-               Phát bài được chọn
-            */
-
-            loadSong(
-                randomSong,
-                true
-            );
-
-
-            /*
-               Hiệu ứng nút
-            */
-
-            soundBtn.classList.add(
-                'active'
-            );
-
-
-            /*
-               Toast
-            */
-
-            const toast =
-                $('#toast');
-
-            if (toast) {
-
-                const song =
-                    playlist[randomSong];
-
-                toast.textContent =
-                    `▶ ${song.title}`;
-
-                toast.classList.add(
-                    'show'
-                );
-
-                setTimeout(
-                    () => {
-
-                        toast.classList.remove(
-                            'show'
-                        );
-
-                        toast.textContent =
-                            '';
-
-                    },
-                    1400
-                );
-
-            }
 
         }
     );
 
 }
+
 
 /* =========================================================
    YEAR
@@ -1856,6 +3241,7 @@ if (
 
 const year =
     $('#year');
+
 
 if (year) {
 
@@ -1881,13 +3267,16 @@ window.addEventListener(
             return;
         }
 
+
         const ripple =
             document.createElement(
                 'span'
             );
 
+
         ripple.className =
             'ripple';
+
 
         ripple.style.cssText = `
             position: fixed;
@@ -1899,17 +3288,21 @@ window.addEventListener(
             border-radius: 50%;
             transform: translate(-50%, -50%);
             pointer-events: none;
-            z-index: 90;
+            z-index: 10060;
             animation: ripple .7s ease-out forwards;
         `;
+
 
         document.body.appendChild(
             ripple
         );
 
+
         setTimeout(
             () => {
+
                 ripple.remove();
+
             },
             700
         );
