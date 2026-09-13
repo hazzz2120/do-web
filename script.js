@@ -1739,7 +1739,7 @@ if (themeBtn) {
                         );
 
                         toast.textContent =
-                            'Copied ✓';
+                            '';
 
                     },
                     1200
@@ -1837,7 +1837,7 @@ if (
                         );
 
                         toast.textContent =
-                            'Copied ✓';
+                            '';
 
                     },
                     1400
